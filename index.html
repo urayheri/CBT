@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>CBT Ujian DKV XI - Fotografi & Videografi</title>
+  <title>CBT Ujian DKV XI - Fotografi & Videografi (Acak System)</title>
   <style>
     /* Reset & Kunci Layout Anti-Geser */
     * {
@@ -265,7 +265,7 @@
   <div id="start-overlay" class="overlay">
     <h2 style="color: #38bdf8; margin-bottom: 8px;">Ujian CBT DKV Kelas XI</h2>
     <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px;">Materi: Dasar & Teknik Fotografi - Videografi</p>
-    <p style="color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">⚠️ Target Nilai Ketuntasan Minimal: 80</p>
+    <p style="color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">⚠️ Target Nilai Ketuntasan Minimal: 80 (Soal Diacak)</p>
     
     <div class="form-group">
       <label for="student-name">Nama Lengkap Siswa:</label>
@@ -316,62 +316,115 @@
   </div>
 
   <script>
-    // URL Google Apps Script Anda
     const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxan3Ca7thzAZtqo0tmG3YJBpxwZtG5azbqcrGBogXZEzaNDyZ7J9szPGRGnMR3l43fWA/exec";
 
-    const questions = [
-      { id: 1, q: "Komponen kamera yang berfungsi mengatur tingkat sensitivitas sensor terhadap cahaya adalah...", options: ["A. Aperture", "B. Shutter Speed", "C. ISO", "D. White Balance"], answer: "C" },
-      { id: 2, q: "Semakin kecil angka f-stop pada lensa (contoh: f/1.8), maka...", options: ["A. Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit", "B. Bukaan diafragma semakin sempit dan gambar semakin gelap", "C. Sensitivitas sensor meningkat tajam", "D. Kecepatan rana menjadi makin lambat"], answer: "A" },
-      { id: 3, q: "Fitur pada kamera yang digunakan untuk menyelaraskan warna putih agar objek terlihat alami dalam kondisi pencahayaan berbeda adalah...", options: ["A. Focus Mode", "B. ISO", "C. White Balance", "D. Exposure Compensation"], answer: "C" },
-      { id: 4, q: "Kombinasi segitiga eksposure yang tepat saat mengambil foto objek bergerak cepat (panning/freezing) ditentukan oleh pengaturan utama pada...", options: ["A. Aperture", "B. Shutter Speed", "C. Focal Length", "D. Picture Profile"], answer: "B" },
-      { id: 5, q: "Penggunaan ISO tinggi (misal: ISO 6400) pada kondisi minim cahaya akan menimbulkan efek samping berupa...", options: ["A. Gambar menjadi blur", "B. Bintik-bintik digital (noise)", "C. Lensa menjadi panas", "D. Warna foto menjadi terlalu kontras"], answer: "B" },
-      { id: 6, q: "Efek bokeh (latar belakang kabur) paling mudah didapatkan jika kita menggunakan...", options: ["A. Diafragma f/22 dan lensa sudut lebar", "B. Diafragma f/1.4 dan jarak fokus dekat ke objek", "C. Shutter speed 1/1000 detik dan ISO rendah", "D. Shutter speed 2 detik dan tripod"], answer: "B" },
-      { id: 7, q: "Teknik fotografi yang menghasilkan jejak cahaya kendaraan pada malam hari dinamakan...", options: ["A. High Speed Photography", "B. Macro Photography", "C. Long Exposure / Slow Shutter", "D. Freeze Motion"], answer: "C" },
-      { id: 8, q: "Jenis lensa yang memiliki panjang fokus bervariasi (dapat diubah zoom-in/zoom-out) dinamakan...", options: ["A. Lensa Fix / Prime", "B. Lensa Zoom", "C. Lensa Fisheye", "D. Lensa Anamorphic"], answer: "B" },
-      { id: 9, q: "Fungsi utama dari tombol Shutter Release ditekan setengah jalan (half-press) adalah untuk...", options: ["A. Mengunci fokus dan mengukur eksposure (metering)", "B. Langsung mengambil gambar", "C. Membuka diafragma secara otomatis", "D. Mengubah nilai ISO"], answer: "A" },
-      { id: 10, q: "Format file foto mentah yang menyimpan seluruh data informasi dari sensor tanpa kompresi adalah...", options: ["A. JPEG", "B. PNG", "C. RAW", "D. TIFF"], answer: "C" },
-      { id: 11, q: "Satuan kecepatan rana (shutter speed) pada kamera umumnya diukur dalam hitungan...", options: ["A. Milimeter (mm)", "B. Detik atau pecahan detik", "C. Kelvin (K)", "D. Megapixel (MP)"], answer: "B" },
-      { id: 12, q: "Lensa yang memiliki sudut pandang sangat lebar hingga mencapai 180 derajat dan menghasilkan efek cembung dinamakan...", options: ["A. Lensa Telephoto", "B. Lensa Macro", "C. Lensa Fisheye", "D. Lensa Standard"], answer: "C" },
-      { id: 13, q: "Apabila hasil foto tampak sangat putih dan kehilangan detail karena terlalu banyak cahaya yang masuk, kondisi tersebut dinamakan...", options: ["A. Under-exposed", "B. Over-exposed", "C. Out of focus", "D. High Contrast"], answer: "B" },
-      { id: 14, q: "Skala suhu warna White Balance dinyatakan dalam satuan...", options: ["A. Celcius", "B. Fahrenheit", "C. Kelvin", "D. Diopter"], answer: "C" },
-      { id: 15, q: "Bagian kamera refleks yang berfungsi memantulkan cahaya dari lensa ke viewfinder dinamakan...", options: ["A. Cermin Pentaprisma / Mirror", "B. Diopter", "C. Sensor CMOS", "D. Shutter Curtain"], answer: "A" },
-      { id: 16, q: "Aturan komposisi yang membagi bingkai foto menjadi 9 bagian sejajar melalui 2 garis horizontal dan 2 garis vertikal adalah...", options: ["A. Golden Ratio", "B. Rule of Thirds", "C. Symmetry", "D. Framing Technique"], answer: "B" },
-      { id: 17, q: "Teknik komposisi yang memanfaatkan elemen di sekitar objek (seperti jendela atau bingkai pintu) untuk mengarahkan pandangan ke objek utama dinamakan...", options: ["A. Leading Lines", "B. Framing", "C. Fill the Frame", "D. Pattern"], answer: "B" },
-      { id: 18, q: "Sudut pengambilan gambar di mana posisi kamera berada lebih rendah dari objek sehingga objek terlihat megah dan berwibawa dinamakan...", options: ["A. High Angle", "B. Eye Level", "C. Low Angle", "D. Bird Eye View"], answer: "C" },
-      { id: 19, q: "Pengambilan foto dari ketinggian tegak lurus mengarah ke bawah menyerupai pandangan burung dinamakan...", options: ["A. Bird Eye View", "B. Frog Eye View", "C. High Angle", "D. Top Angle"], answer: "A" },
-      { id: 20, q: "Elemen garis dalam foto yang berfungsi menuntun mata pengamat menuju ke subjek utama dinamakan...", options: ["A. Vanishing Point", "B. Leading Lines", "C. Horizon Line", "D. Diagonals"], answer: "B" },
-      { id: 21, q: "Mengisi seluruh bingkai foto penuh dengan subjek utama tanpa menyisakan ruang kosong dinamakan teknik...", options: ["A. Negative Space", "B. Fill the Frame", "C. Centered Composition", "D. Minimalist"], answer: "B" },
-      { id: 22, q: "Ruang kosong di sekitar subjek utama yang berfungsi memberikan kesan bernapas dan fokus pada subjek dinamakan...", options: ["A. Negative Space", "B. Headroom", "C. Looking Room", "D. Background"], answer: "A" },
-      { id: 23, q: "Sudut pandang kamera sejajar dengan ketinggian mata objek yang diambil dinamakan...", options: ["A. Low Angle", "B. Top Angle", "C. Eye Level", "D. Dutch Angle"], answer: "C" },
-      { id: 24, q: "Sudut kamera yang sengaja dimiringkan untuk menciptakan kesan ketegangan atau drama dinamakan...", options: ["A. Bird Eye View", "B. Dutch Angle / Tilt Angle", "C. Frog Eye View", "D. High Angle"], answer: "B" },
-      { id: 25, q: "Aturan Headroom dalam komposisi foto/video portrait mengatur tentang...", options: ["A. Jarak ruang antara bagian atas kepala subjek dengan batas atas bingkai", "B. Jarak antara pandangan mata subjek ke arah samping", "C. Ketinggian lensa dari bahu subjek", "D. Pencahayaan di atas kepala subjek"], answer: "A" },
-      { id: 26, q: "Jumlah bingkai gambar yang diputar dalam satu detik video dinyatakan dalam satuan...", options: ["A. Bitrate", "B. Resolution", "C. FPS (Frames Per Second)", "D. Aspect Ratio"], answer: "C" },
-      { id: 27, q: "Standar Frame Rate yang umum digunakan dalam penayangan sinema/film komersial adalah...", options: ["A. 15 fps", "B. 24 fps", "C. 60 fps", "D. 120 fps"], answer: "B" },
-      { id: 28, q: "Jenis ukuran shot (shot size) yang menampilkan seluruh tubuh manusia beserta lingkungan di sekitarnya secara sangat luas dinamakan...", options: ["A. Medium Shot", "B. Close-Up", "C. Extreme Long Shot (ELS)", "D. Full Shot"], answer: "C" },
-      { id: 29, q: "Ukuran shot yang menampilkan objek manusia dari batas pinggang hingga atas kepala dinamakan...", options: ["A. Close-Up", "B. Medium Shot (MS)", "C. Extreme Close-Up", "D. Long Shot"], answer: "B" },
-      { id: 30, q: "Shot yang difokuskan pada detail sangat spesifik seperti mata, jemari, atau tulisan pada surat dinamakan...", options: ["A. Big Close-Up", "B. Extreme Close-Up (ECU)", "C. Medium Close-Up", "D. Detail Shot"], answer: "B" },
-      { id: 31, q: "Over the Shoulder Shot (OTS) umumnya digunakan dalam adegan...", options: ["A. Pemandangan alam", "B. Olahraga ekstrim", "C. Percakapan antara dua orang karakter", "D. Aksi kejar-kejaran mobil"], answer: "C" },
-      { id: 32, q: "Rasio aspek standar layar monitor widescreen modern dan video YouTube adalah...", options: ["A. 4:3", "B. 1:1", "C. 16:9", "D. 9:16"], answer: "C" },
-      { id: 33, q: "Perbedaan utama antara video Interlaced (1080i) dan Progressive (1080p) terletak pada...", options: ["A. Cara pemindaian baris gambar (ganjil-genap vs berurutan)", "B. Jumlah audio track", "C. Warna video yang dihasilkan", "D. Ukuran resolusi horizontal"], answer: "A" },
-      { id: 34, q: "Ruang kosong di depan arah pandang wajah objek dinamakan...", options: ["A. Headroom", "B. Looking Room / Noseroom", "C. Walking Room", "D. Lead Room"], answer: "B" },
-      { id: 35, q: "Point of View (POV) shot adalah pengambilan gambar yang menunjukkan...", options: ["A. Sudut pandang sutradara", "B. Sudut pandang mata dari karakter dalam film", "C. Penonton dari balik layar", "D. Sudut pandang dari atas udara"], answer: "B" },
-      { id: 36, q: "Pergerakan kepala kamera secara horizontal dari kiri ke kanan atau sebaliknya tanpa menggeser kaki tripod dinamakan...", options: ["A. Panning", "B. Tilting", "C. Dolly", "D. Pedestal"], answer: "A" },
-      { id: 37, q: "Pergerakan kepala kamera secara vertikal (ke atas atau ke bawah) pada porosnya dinamakan...", options: ["A. Panning", "B. Tilting", "C. Tracking", "D. Crab"], answer: "B" },
-      { id: 38, q: "Menggerakkan seluruh badan kamera mendekati atau menjauhi objek menggunakan rek/roda dinamakan...", options: ["A. Zoom In / Zoom Out", "B. Dolly In / Dolly Out", "C. Pan Left / Pan Right", "D. Tilt Up / Tilt Down"], answer: "B" },
-      { id: 39, q: "Menggerakkan kamera secara fisik sejajar menyamping di sebelah objek yang sedang berjalan dinamakan...", options: ["A. Pedestal", "B. Arc", "C. Crab / Tracking Shot", "D. Tilting"], answer: "C" },
-      { id: 40, q: "Perbedaan mendasar antara Zoom In dan Dolly In adalah...", options: ["A. Zoom mengubah focal length lensa, sedangkan Dolly memindahkan posisi kamera secara fisik", "B. Zoom membutuhkan roda, Dolly menggunakan tombol", "C. Zoom tidak mengubah perspektif latar belakang", "D. Dolly membuat gambar menjadi blur"], answer: "A" },
-      { id: 41, q: "Dalam teknik Three-Point Lighting, cahaya utama yang paling terang dan difokuskan pada objek dinamakan...", options: ["A. Key Light", "B. Fill Light", "C. Back Light", "D. Ambient Light"], answer: "A" },
-      { id: 42, q: "Fungsi dari Fill Light pada tata cahaya 3 titik adalah...", options: ["A. Memisahkan subjek dari latar belakang", "B. Mengisi/mengurangi bayangan tajam yang dihasilkan oleh Key Light", "C. Menerangi latar belakang secara penuh", "D. Memberikan efek kilau pada rambut"], answer: "B" },
-      { id: 43, q: "Lampu yang diletakkan di belakang subjek mengarah ke kamera untuk memberi garis batas (rim light) dinamakan...", options: ["A. Key Light", "B. Fill Light", "C. Back Light", "D. Practical Light"], answer: "C" },
-      { id: 44, q: "Menggerakkan posisi fisik kamera naik atau turun secara vertikal dinamakan...", options: ["A. Tilting", "B. Pedestal (Ped Up / Ped Down)", "C. Dolly", "D. Rolling"], answer: "B" },
-      { id: 45, q: "Alat bantu penstabil gerak kamera saat videografer mengambil gambar sambil berjalan dinamakan...", options: ["A. Monopod", "B. Slider", "C. Gimbal / Steadicam", "D. Rig Shoulder"], answer: "C" },
-      { id: 46, q: "Sketsa gambar berurutan yang disusun beserta deskripsi adegan untuk merencanakan alur shot film dinamakan...", options: ["A. Naskah / Script", "B. Storyboard", "C. Floorplan", "D. Call Sheet"], answer: "B" },
-      { id: 47, q: "Pemotongan adegan video dari satu shot ke shot lain secara langsung tanpa jeda transisi dinamakan...", options: ["A. Cut", "B. Dissolve", "C. Fade Out", "D. Wipe"], answer: "A" },
-      { id: 48, q: "Transisi video di mana gambar perlahan menghilang menjadi warna hitam dinamakan...", options: ["A. Cross Dissolve", "B. Fade to Black", "C. Cut on Action", "D. Jump Cut"], answer: "B" },
-      { id: 49, q: "Proses penyesuaian dan koreksi warna pada video agar memiliki gaya visual (mood/look) tertentu dinamakan...", options: ["A. Color Correction", "B. Color Grading", "C. Rendering", "D. Compositing"], answer: "B" },
-      { id: 50, q: "Kesalahan kesinambungan elemen (seperti posisi barang atau baju) antar-shot yang disambung dinamakan pelanggaran...", options: ["A. Rule of Thirds", "B. Continuity", "C. Aspect Ratio", "D. Pacing"], answer: "B" }
+    // MASTER BANK SOAL (100 SOAL FOTOGRAFI & VIDEOGRAFI DKV)
+    const allQuestionsBank = [
+      { id: 1, q: "Komponen kamera yang berfungsi mengatur tingkat sensitivitas sensor terhadap cahaya adalah...", options: ["Aperture", "Shutter Speed", "ISO", "White Balance"], answer: "ISO" },
+      { id: 2, q: "Semakin kecil angka f-stop pada lensa (contoh: f/1.8), maka...", options: ["Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit", "Bukaan diafragma semakin sempit dan gambar semakin gelap", "Sensitivitas sensor meningkat tajam", "Kecepatan rana menjadi makin lambat"], answer: "Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit" },
+      { id: 3, q: "Fitur pada kamera yang digunakan untuk menyelaraskan warna putih agar objek terlihat alami adalah...", options: ["Focus Mode", "ISO", "White Balance", "Exposure Compensation"], answer: "White Balance" },
+      { id: 4, q: "Kombinasi segitiga eksposure yang tepat saat mengambil foto objek bergerak cepat (freezing) ditentukan oleh...", options: ["Aperture", "Shutter Speed", "Focal Length", "Picture Profile"], answer: "Shutter Speed" },
+      { id: 5, q: "Penggunaan ISO tinggi (misal: ISO 6400) pada kondisi minim cahaya akan menimbulkan...", options: ["Gambar menjadi blur", "Bintik-bintik digital (noise)", "Lensa menjadi panas", "Warna foto menjadi terlalu kontras"], answer: "Bintik-bintik digital (noise)" },
+      { id: 6, q: "Efek bokeh (latar belakang kabur) paling mudah didapatkan jika kita menggunakan...", options: ["Diafragma f/22 dan lensa sudut lebar", "Diafragma f/1.4 dan jarak fokus dekat ke objek", "Shutter speed 1/1000 detik dan ISO rendah", "Shutter speed 2 detik dan tripod"], answer: "Diafragma f/1.4 dan jarak fokus dekat ke objek" },
+      { id: 7, q: "Teknik fotografi yang menghasilkan jejak cahaya kendaraan pada malam hari dinamakan...", options: ["High Speed Photography", "Macro Photography", "Long Exposure / Slow Shutter", "Freeze Motion"], answer: "Long Exposure / Slow Shutter" },
+      { id: 8, q: "Jenis lensa yang memiliki panjang fokus bervariasi (dapat diubah zoom-in/zoom-out) dinamakan...", options: ["Lensa Fix / Prime", "Lensa Zoom", "Lensa Fisheye", "Lensa Anamorphic"], answer: "Lensa Zoom" },
+      { id: 9, q: "Fungsi utama dari tombol Shutter Release ditekan setengah jalan (half-press) adalah...", options: ["Mengunci fokus dan mengukur eksposure (metering)", "Langsung mengambil gambar", "Membuka diafragma secara otomatis", "Mengubah nilai ISO"], answer: "Mengunci fokus dan mengukur eksposure (metering)" },
+      { id: 10, q: "Format file foto mentah yang menyimpan seluruh data informasi dari sensor tanpa kompresi adalah...", options: ["JPEG", "PNG", "RAW", "TIFF"], answer: "RAW" },
+      { id: 11, q: "Satuan kecepatan rana (shutter speed) pada kamera umumnya diukur dalam...", options: ["Milimeter (mm)", "Detik atau pecahan detik", "Kelvin (K)", "Megapixel (MP)"], answer: "Detik atau pecahan detik" },
+      { id: 12, q: "Lensa yang memiliki sudut pandang sangat lebar hingga mencapai 180 derajat dan cembung dinamakan...", options: ["Lensa Telephoto", "Lensa Macro", "Lensa Fisheye", "Lensa Standard"], answer: "Lensa Fisheye" },
+      { id: 13, q: "Apabila hasil foto tampak sangat putih dan kehilangan detail karena terlalu banyak cahaya, kondisi tersebut dinamakan...", options: ["Under-exposed", "Over-exposed", "Out of focus", "High Contrast"], answer: "Over-exposed" },
+      { id: 14, q: "Skala suhu warna White Balance dinyatakan dalam satuan...", options: ["Celcius", "Fahrenheit", "Kelvin", "Diopter"], answer: "Kelvin" },
+      { id: 15, q: "Bagian kamera refleks yang berfungsi memantulkan cahaya dari lensa ke viewfinder dinamakan...", options: ["Cermin Pentaprisma / Mirror", "Diopter", "Sensor CMOS", "Shutter Curtain"], answer: "Cermin Pentaprisma / Mirror" },
+      { id: 16, q: "Aturan komposisi yang membagi bingkai foto menjadi 9 bagian sejajar dinamakan...", options: ["Golden Ratio", "Rule of Thirds", "Symmetry", "Framing Technique"], answer: "Rule of Thirds" },
+      { id: 17, q: "Teknik komposisi memanfaatkan elemen di sekitar objek (seperti jendela/pintu) dinamakan...", options: ["Leading Lines", "Framing", "Fill the Frame", "Pattern"], answer: "Framing" },
+      { id: 18, q: "Sudut pengambilan gambar di mana posisi kamera berada lebih rendah dari objek dinamakan...", options: ["High Angle", "Eye Level", "Low Angle", "Bird Eye View"], answer: "Low Angle" },
+      { id: 19, q: "Pengambilan foto dari ketinggian tegak lurus mengarah ke bawah dinamakan...", options: ["Bird Eye View", "Frog Eye View", "High Angle", "Top Angle"], answer: "Bird Eye View" },
+      { id: 20, q: "Elemen garis dalam foto yang berfungsi menuntun mata pengamat menuju ke subjek utama dinamakan...", options: ["Vanishing Point", "Leading Lines", "Horizon Line", "Diagonals"], answer: "Leading Lines" },
+      { id: 21, q: "Mengisi seluruh bingkai foto penuh dengan subjek utama tanpa ruang kosong dinamakan...", options: ["Negative Space", "Fill the Frame", "Centered Composition", "Minimalist"], answer: "Fill the Frame" },
+      { id: 22, q: "Ruang kosong di sekitar subjek utama yang memberikan kesan bernapas dinamakan...", options: ["Negative Space", "Headroom", "Looking Room", "Background"], answer: "Negative Space" },
+      { id: 23, q: "Sudut pandang kamera sejajar dengan ketinggian mata objek yang diambil dinamakan...", options: ["Low Angle", "Top Angle", "Eye Level", "Dutch Angle"], answer: "Eye Level" },
+      { id: 24, q: "Sudut kamera yang sengaja dimiringkan untuk menciptakan kesan ketegangan dinamakan...", options: ["Bird Eye View", "Dutch Angle / Tilt Angle", "Frog Eye View", "High Angle"], answer: "Dutch Angle / Tilt Angle" },
+      { id: 25, q: "Aturan Headroom dalam komposisi foto/video portrait mengatur tentang...", options: ["Jarak ruang antara bagian atas kepala subjek dengan batas atas bingkai", "Jarak antara pandangan mata subjek ke arah samping", "Ketinggian lensa dari bahu subjek", "Pencahayaan di atas kepala subjek"], answer: "Jarak ruang antara bagian atas kepala subjek dengan batas atas bingkai" },
+      { id: 26, q: "Jumlah bingkai gambar yang diputar dalam satu detik video dinyatakan dalam...", options: ["Bitrate", "Resolution", "FPS (Frames Per Second)", "Aspect Ratio"], answer: "FPS (Frames Per Second)" },
+      { id: 27, q: "Standar Frame Rate yang umum digunakan dalam penayangan sinema/film komersial adalah...", options: ["15 fps", "24 fps", "60 fps", "120 fps"], answer: "24 fps" },
+      { id: 28, q: "Jenis ukuran shot yang menampilkan seluruh tubuh manusia beserta lingkungan secara sangat luas dinamakan...", options: ["Medium Shot", "Close-Up", "Extreme Long Shot (ELS)", "Full Shot"], answer: "Extreme Long Shot (ELS)" },
+      { id: 29, q: "Ukuran shot yang menampilkan objek manusia dari batas pinggang hingga atas kepala dinamakan...", options: ["Close-Up", "Medium Shot (MS)", "Extreme Close-Up", "Long Shot"], answer: "Medium Shot (MS)" },
+      { id: 30, q: "Shot yang difokuskan pada detail sangat spesifik seperti mata atau jemari dinamakan...", options: ["Big Close-Up", "Extreme Close-Up (ECU)", "Medium Close-Up", "Detail Shot"], answer: "Extreme Close-Up (ECU)" },
+      { id: 31, q: "Over the Shoulder Shot (OTS) umumnya digunakan dalam adegan...", options: ["Pemandangan alam", "Olahraga ekstrim", "Percakapan antara dua orang karakter", "Aksi kejar-kejaran mobil"], answer: "Percakapan antara dua orang karakter" },
+      { id: 32, q: "Rasio aspek standar layar monitor widescreen modern dan video YouTube adalah...", options: ["4:3", "1:1", "16:9", "9:16"], answer: "16:9" },
+      { id: 33, q: "Perbedaan utama antara video Interlaced (1080i) dan Progressive (1080p) terletak pada...", options: ["Cara pemindaian baris gambar (ganjil-genap vs berurutan)", "Jumlah audio track", "Warna video yang dihasilkan", "Ukuran resolusi horizontal"], answer: "Cara pemindaian baris gambar (ganjil-genap vs berurutan)" },
+      { id: 34, q: "Ruang kosong di depan arah pandang wajah objek dinamakan...", options: ["Headroom", "Looking Room / Noseroom", "Walking Room", "Lead Room"], answer: "Looking Room / Noseroom" },
+      { id: 35, q: "Point of View (POV) shot adalah pengambilan gambar yang menunjukkan...", options: ["Sudut pandang sutradara", "Sudut pandang mata dari karakter dalam film", "Penonton dari balik layar", "Sudut pandang dari atas udara"], answer: "Sudut pandang mata dari karakter dalam film" },
+      { id: 36, q: "Pergerakan kepala kamera secara horizontal dari kiri ke kanan tanpa menggeser tripod dinamakan...", options: ["Panning", "Tilting", "Dolly", "Pedestal"], answer: "Panning" },
+      { id: 37, q: "Pergerakan kepala kamera secara vertikal (ke atas/ke bawah) pada porosnya dinamakan...", options: ["Panning", "Tilting", "Tracking", "Crab"], answer: "Tilting" },
+      { id: 38, q: "Menggerakkan seluruh badan kamera mendekati atau menjauhi objek menggunakan rek dinamakan...", options: ["Zoom In / Zoom Out", "Dolly In / Dolly Out", "Pan Left / Pan Right", "Tilt Up / Tilt Down"], answer: "Dolly In / Dolly Out" },
+      { id: 39, q: "Menggerakkan kamera secara fisik sejajar menyamping di sebelah objek dinamakan...", options: ["Pedestal", "Arc", "Crab / Tracking Shot", "Tilting"], answer: "Crab / Tracking Shot" },
+      { id: 40, q: "Perbedaan mendasar antara Zoom In dan Dolly In adalah...", options: ["Zoom mengubah focal length lensa, sedangkan Dolly memindahkan posisi kamera secara fisik", "Zoom membutuhkan roda, Dolly menggunakan tombol", "Zoom tidak mengubah perspektif latar belakang", "Dolly membuat gambar menjadi blur"], answer: "Zoom mengubah focal length lensa, sedangkan Dolly memindahkan posisi kamera secara fisik" },
+      { id: 41, q: "Dalam teknik Three-Point Lighting, cahaya utama yang paling terang dinamakan...", options: ["Key Light", "Fill Light", "Back Light", "Ambient Light"], answer: "Key Light" },
+      { id: 42, q: "Fungsi dari Fill Light pada tata cahaya 3 titik adalah...", options: ["Memisahkan subjek dari latar belakang", "Mengisi/mengurangi bayangan tajam yang dihasilkan oleh Key Light", "Menerangi latar belakang secara penuh", "Memberikan efek kilau pada rambut"], answer: "Mengisi/mengurangi bayangan tajam yang dihasilkan oleh Key Light" },
+      { id: 43, q: "Lampu yang diletakkan di belakang subjek mengarah ke kamera untuk memberi garis batas dinamakan...", options: ["Key Light", "Fill Light", "Back Light", "Practical Light"], answer: "Back Light" },
+      { id: 44, q: "Menggerakkan posisi fisik kamera naik atau turun secara vertikal dinamakan...", options: ["Tilting", "Pedestal (Ped Up / Ped Down)", "Dolly", "Rolling"], answer: "Pedestal (Ped Up / Ped Down)" },
+      { id: 45, q: "Alat bantu penstabil gerak kamera saat videografer mengambil gambar sambil berjalan dinamakan...", options: ["Monopod", "Slider", "Gimbal / Steadicam", "Rig Shoulder"], answer: "Gimbal / Steadicam" },
+      { id: 46, q: "Sketsa gambar berurutan beserta deskripsi adegan film dinamakan...", options: ["Naskah / Script", "Storyboard", "Floorplan", "Call Sheet"], answer: "Storyboard" },
+      { id: 47, q: "Pemotongan adegan video dari satu shot ke shot lain secara langsung tanpa transisi dinamakan...", options: ["Cut", "Dissolve", "Fade Out", "Wipe"], answer: "Cut" },
+      { id: 48, q: "Transisi video di mana gambar perlahan menghilang menjadi warna hitam dinamakan...", options: ["Cross Dissolve", "Fade to Black", "Cut on Action", "Jump Cut"], answer: "Fade to Black" },
+      { id: 49, q: "Proses penyesuaian dan penciptaan mood warna pada video dinamakan...", options: ["Color Correction", "Color Grading", "Rendering", "Compositing"], answer: "Color Grading" },
+      { id: 50, q: "Kesalahan kesinambungan elemen antar-shot dinamakan pelanggaran...", options: ["Rule of Thirds", "Continuity", "Aspect Ratio", "Pacing"], answer: "Continuity" },
+
+      // SOAL TAMBAHAN (51 - 100)
+      { id: 51, q: "Lensa fix 50mm sering disebut sebagai lensa standar karena...", options: ["Memiliki perspektif yang paling mirip dengan sudut pandang mata manusia", "Bisa melakukan zoom sangat jauh", "Harganya selalu paling murah", "Dapat mengambil gambar tanpa cahaya"], answer: "Memiliki perspektif yang paling mirip dengan sudut pandang mata manusia" },
+      { id: 52, q: "Istilah 'Depth of Field' (DoF) dalam fotografi merujuk pada...", options: ["Kedalaman ruang tajam atau area fokus dalam gambar", "Kecepatan pergerakan sensor kamera", "Tingkat kontras warna dalam foto", "Kekuatan kilatan lampu flash"], answer: "Kedalaman ruang tajam atau area fokus dalam gambar" },
+      { id: 53, q: "Aperture dengan nilai f/22 akan menghasilkan...", options: ["Ruang tajam sangat luas, seluruh latar belakang terlihat jelas", "Ruang tajam sangat sempit dan latar kabur", "Foto menjadi sangat terang di malam hari", "Kecepatan fokus menjadi dua kali lebih cepat"], answer: "Ruang tajam sangat luas, seluruh latar belakang terlihat jelas" },
+      { id: 54, q: "Fungsi utama dari penggunaan Parasol / Lens Hood pada lensa adalah...", options: ["Mencegah pantulan cahaya luar (flare) masuk ke lensa", "Membuat fokus gambar menjadi lebih tajam", "Mengubah warna foto menjadi kebiruan", "Melindungi kamera dari air laut"], answer: "Mencegah pantulan cahaya luar (flare) masuk ke lensa" },
+      { id: 55, q: "Teknik 'Panning' dilakukan dengan cara menggerakkan kamera mengikuti arah objek bergerak menggunakan Shutter Speed...", options: ["Lambat (misal 1/15s sampai 1/30s)", "Sangat cepat (misal 1/2000s)", "Tinggi (misal 1/1000s)", "Bulb Mode 10 detik"], answer: "Lambat (misal 1/15s sampai 1/30s)" },
+      { id: 56, q: "Gambar yang diambil dengan sudut High Angle akan memberikan kesan objek terlihat...", options: ["Kecil, lemah, atau tertekan", "Besar, agung, dan berkuasa", "Sejajar dan natural", "Dynamic dan stabil"], answer: "Kecil, lemah, atau tertekan" },
+      { id: 57, q: "Format audio uncompressed berkualitas tinggi yang umum digunakan dalam perekaman video profesional adalah...", options: ["WAV / AIFF", "MP3", "AAC", "OGG"], answer: "WAV / AIFF" },
+      { id: 58, q: "Jenis mikrofon yang sangat sensitif dari arah depan dan biasa dipasang pada boom pole dalam syuting film dinamakan...", options: ["Shotgun Microphone", "Lavalier / Clip-on", "Dynamic Microphone", "Boundary Microphone"], answer: "Shotgun Microphone" },
+      { id: 59, q: "Fungsi dari Deadcat / Windscreen pada mikrofon lapangan adalah...", options: ["Meredam suara hembusan angin saat merekam outdoor", "Membuat suara vokal menjadi lebih merdu", "Meningkatkan volume audio secara otomatis", "Menghubungkan kabel audio tanpa nirkabel"], answer: "Meredam suara hembusan angin saat merekam outdoor" },
+      { id: 60, q: "Istilah 'B-Roll' dalam videografi mengacu pada...", options: ["Bahan video pendukung yang disisipkan untuk memperjelas narasi utama (A-Roll)", "Daftar adegan yang gagal ditayangkan", "Rekaman audio latar belakang", "Video dengan kualitas resolusi rendah"], answer: "Bahan video pendukung yang disisipkan untuk memperjelas narasi utama (A-Roll)" },
+      { id: 61, q: "Teknik memotong video di mana audio dari klip berikutnya terdengar sebelum gambarnya muncul dinamakan...", options: ["J-Cut", "L-Cut", "Jump Cut", "Match Cut"], answer: "J-Cut" },
+      { id: 62, q: "Teknik memotong video di mana gambar berubah ke adegan baru namun audionya tetap berlanjut dinamakan...", options: ["L-Cut", "J-Cut", "Cross Cut", "Smash Cut"], answer: "L-Cut" },
+      { id: 63, q: "Aturan 180-Degree Rule dalam sinematografi diterapkan untuk menjaga...", options: ["Konsistensi tata letak spasial dan arah pandang antarkarakter", "Pencahayaan agar selalu konstan", "Fokus lensa agar tidak terlepas", "Kecepatan fps video"], answer: "Konsistensi tata letak spasial dan arah pandang antarkarakter" },
+      { id: 64, q: "Jump Cut adalah teknik pemotongan gambar yang sengaja dilakukan untuk...", options: ["Memberikan kesan loncatan waktu atau mempercepat alur adegan", "Menghaluskan transisi adegan", "Memperbaiki kesalahan pencahayaan", "Menghilangkan suara latar"], answer: "Memberikan kesan loncatan waktu atau mempercepat alur adegan" },
+      { id: 65, q: "Proses 'Color Correction' berbeda dengan 'Color Grading' karena tujuannya adalah...", options: ["Menyeimbangkan dan menaturalisasi warna dasar agar sesuai kondisi asli", "Memberikan nuansa visual artistik/dramatis pada film", "Mengubah warna baju karakter", "Menghapus background hijau (Chroma key)"], answer: "Menyeimbangkan dan menaturalisasi warna dasar agar sesuai kondisi asli" },
+      { id: 66, q: "Fungsi utama layar hijau (Green Screen / Chroma Key) dalam produksi video adalah...", options: ["Memudahkan isolasi latar belakang untuk diganti dengan visual sintetis", "Membuat pencahayaan objek menjadi lebih terang", "Meredam gema suara di dalam ruangan", "Meningkatkan ketajaman lensa kamera"], answer: "Memudahkan isolasi latar belakang untuk diganti dengan visual sintetis" },
+      { id: 67, q: "Warna hijau dipilih sebagai standar Chroma Key karena...", options: ["Warna hijau paling jauh dari pigmen tonal kulit manusia", "Hijau adalah warna paling murah diproduksi", "Warna hijau menyerap cahaya paling kuat", "Kamera digital tidak bisa merekam warna hijau"], answer: "Warna hijau paling jauh dari pigmen tonal kulit manusia" },
+      { id: 68, q: "Istilah 'Clapperboard' dalam produksi film digunakan untuk...", options: ["Menyelaraskan (sync) audio dan video serta menandai nama adegan/take", "Menutup lensa dari debu", "Memberikan pencahayaan kilat", "Alat pengukur jarak fokus kamera"], answer: "Menyelaraskan (sync) audio dan video serta menandai nama adegan/take" },
+      { id: 69, q: "Tipe pencahayaan 'High Key Lighting' menghasilkan visual yang...", options: ["Terang, minim bayangan, dan berkesan positif/ceria", "Gelap, kontras tinggi, dan berkesan misterius", "Dominan berwarna merah dan hitam", "Penuh dengan bayangan tajam di wajah"], answer: "Terang, minim bayangan, dan berkesan positif/ceria" },
+      { id: 70, q: "Tipe pencahayaan 'Low Key Lighting' sering digunakan pada genre film...", options: ["Horor, Thriller, dan Film Noir", "Komedi situasi (Sitcom)", "Dokumenter edukasi", "Video klip musik pop"], answer: "Horor, Thriller, dan Film Noir" },
+      { id: 71, q: "Penggunaan Filter ND (Neutral Density) pada lensa kamera berfungsi sebagai...", options: ["'Kacamata hitam' lensa untuk mengurangi intensitas cahaya berlebih", "Peningkat kejenuhan warna foto secara otomatis", "Alat untuk memperbesar jarak fokus objek", "Pembersih jamur pada elemen lensa"], answer: "'Kacamata hitam' lensa untuk mengurangi intensitas cahaya berlebih" },
+      { id: 72, q: "Filter CPL (Circular Polarizer) paling efektif digunakan untuk...", options: ["Menghilangkan pantulan cahaya pada kaca/air dan memperbiru langit", "Meningkatkan kecepatan Shutter Speed di malam hari", "Memberikan efek blur pada tepi foto", "Mengubah foto warna menjadi hitam putih"], answer: "Menghilangkan pantulan cahaya pada kaca/air dan memperbiru langit" },
+      { id: 73, q: "Dalam videografi, istilah 'Rack Focus' mengacu pada teknik...", options: ["Mengalihkan fokus secara perlahan dari satu objek ke objek lain dalam satu shot", "Mempertahankan fokus pada objek yang bergerak cepat", "Mengunci fokus di posisi infinite", "Menggunakan dua kamera sekaligus secara paralel"], answer: "Mengalihkan fokus secara perlahan dari satu objek ke objek lain dalam satu shot" },
+      { id: 74, q: "Gimbal 3-Axis menstabilkan kamera pada tiga poros pergerakan, yaitu...", options: ["Pan, Tilt, dan Roll", "Zoom, Focus, dan Iris", "Dolly, Truck, dan Pedestal", "High, Low, dan Eye level"], answer: "Pan, Tilt, dan Roll" },
+      { id: 75, q: "Pengambilan gambar dengan teknik 'Establishing Shot' bertujuan untuk...", options: ["Memperkenalkan lokasi, waktu, dan atmosfer tempat adegan berlangsung", "Menampilkan ekspresi emosi mendalam dari karakter utama", "Menunjukkan detail produk secara tertutup", "Menampilkan adegan klimaks film"], answer: "Memperkenalkan lokasi, waktu, dan atmosfer tempat adegan berlangsung" },
+      { id: 76, q: "Mode pemotretan 'Aperture Priority' (A/Av) pada kamera berarti...", options: ["Pengguna menentukan nilai Aperture, kamera mengatur Shutter Speed otomatis", "Pengguna mengatur Shutter Speed, kamera menentukan Aperture", "Seluruh pengaturan diatur otomatis oleh sistem komputer kamera", "ISO dan White Balance diubah secara acak"], answer: "Pengguna menentukan nilai Aperture, kamera mengatur Shutter Speed otomatis" },
+      { id: 77, q: "Mode pemotretan 'Shutter Priority' (S/Tv) paling cocok digunakan untuk...", options: ["Memotret aksi olahraga atau riak air mengalir dengan kontrol waktu spesifik", "Membuat foto portrait dengan background bokeh sempurna", "Memotret lanskap alam di siang hari", "Memotret benda-benda studio yang diam"], answer: "Memotret aksi olahraga atau riak air mengalir dengan kontrol waktu spesifik" },
+      { id: 78, q: "Histogram dalam kamera menampilkan informasi grafik tentang...", options: ["Distribusi tingkat kecerahan (tonal) dari shadow hingga highlight", "Kapasitas sisa baterai dan memori card", "Kecepatan fokus otomatis pada objek", "Tingkat ketajaman warna merah, hijau, dan biru"], answer: "Distribusi tingkat kecerahan (tonal) dari shadow hingga highlight" },
+      { id: 79, q: "Jika grafik histogram menumpuk rapat di dinding sebelah kiri, foto tersebut mengalami...", options: ["Under-exposure (terlalu gelap)", "Over-exposure (terlalu terang)", "White Balance yang salah", "Noise tinggi"], answer: "Under-exposure (terlalu gelap)" },
+      { id: 80, q: "Teknik pengambilan gambar 'Slow Motion' dihasilkan dengan cara merekam video pada FPS...", options: ["Tinggi (misal 60 fps - 120 fps) lalu diputar pada kecepatan standar (24 fps)", "Rendah (misal 12 fps) lalu diputar pada kecepatan tinggi", "Standar 24 fps tanpa perubahan software", "Variabel antara 1 fps hingga 10 fps"], answer: "Tinggi (misal 60 fps - 120 fps) lalu diputar pada kecepatan standar (24 fps)" },
+      { id: 81, q: "Teknik 'Time-lapse' dihasilkan dengan cara merekam foto/video pada interval...", options: ["Lama secara berkala lalu diputar dengan kecepatan normal", "Sangat cepat dalam durasi yang panjang", "24 frame per detik penuh secara terus menerus", "Mode lambat dengan shutter speed 1/8000s"], answer: "Lama secara berkala lalu diputar dengan kecepatan normal" },
+      { id: 82, q: "Naskah video yang memuat dua kolom terpisah antara deskripsi Visual dan Audio dinamakan...", options: ["Two-Column Script / Dual Column", "Storyboard Text", "Treatment", "Call Sheet"], answer: "Two-Column Script / Dual Column" },
+      { id: 83, q: "Dokumen jadwal kerja harian syuting yang memuat daftar adegan, lokasi, dan aktor dinamakan...", options: ["Call Sheet", "Shot List", "Script Breakdown", "Production Book"], answer: "Call Sheet" },
+      { id: 84, q: "Lensa 'Macro' dirancang khusus untuk memotret objek...", options: ["Sangat kecil dengan jarak fokus sangat dekat dan perbesaran 1:1", "Sangat jauh seperti satelit atau bulan", "Pemandangan alam yang sangat luas", "Portrait manusia jarak sedang"], answer: "Sangat kecil dengan jarak fokus sangat dekat dan perbesaran 1:1" },
+      { id: 85, q: "Distorsi perspektif di mana objek di tepi frame tampak melengkung cembung dinamakan...", options: ["Barrel Distortion", "Pincushion Distortion", "Chromatic Aberration", "Vignetting"], answer: "Barrel Distortion" },
+      { id: 86, q: "Lingkaran hitam atau gelap di setiap sudut bingkai foto akibat bayangan lensa dinamakan...", options: ["Vignetting", "Flare", "Noise", "Aberasi Kromatik"], answer: "Vignetting" },
+      { id: 87, q: "Garis bias warna keunguan/hijau di sepanjang batas objek berkontras tinggi dinamakan...", options: ["Chromatic Aberration / Purple Fringing", "Distorsi Barrel", "Vignetting", "Motion Blur"], answer: "Chromatic Aberration / Purple Fringing" },
+      { id: 88, q: "Sudut pengambilan gambar 'Frog Eye View' menempatkan kamera...", options: ["Hampir menempel di tanah mengarah ke atas", "Sejajar dengan mata orang dewasa", "Di atas kepala objek menggunakan tripod tinggi", "Di dalam air tanah"], answer: "Hampir menempel di tanah mengarah ke atas" },
+      { id: 89, q: "Ukuran file foto mentah (RAW) jauh lebih besar daripada file JPEG karena...", options: ["Tidak mengalami kompresi data dan menyimpan seluruh dinamika sensor", "Memiliki resolusi pixel dua kali lipat lebih banyak", "Memuat file audio latar belakang", "Dibuat khusus untuk dicetak pada baliho"], answer: "Tidak mengalami kompresi data dan menyimpan seluruh dinamika sensor" },
+      { id: 90, q: "Fungsi utama dari penggunaan Tripod saat membuat foto Long Exposure adalah...", options: ["Menjaga kamera tetap stabil dan bebas dari guncangan tangan (camera shake)", "Membuat foto menjadi otomatis fokus", "Menambah pencahayaan alami di malam hari", "Mengubah lensa biasa menjadi lensa tele"], answer: "Menjaga kamera tetap stabil dan bebas dari guncangan tangan (camera shake)" },
+      { id: 91, q: "Penggunaan 'Monopod' biasanya dipilih oleh fotografer olahraga karena...", options: ["Lebih ringkas, fleksibel, dan cepat dipindahkan dibanding tripod", "Bisa berdiri sendiri tanpa dipegang", "Harganya paling mahal", "Mampu menahan beban berat hingga 100kg"], answer: "Lebih ringkas, fleksibel, dan cepat dipindahkan dibanding tripod" },
+      { id: 92, q: "Istilah 'Catchlight' dalam fotografi portrait mengacu pada...", options: ["Pantulan titik cahaya pada mata subjek yang membuatnya terlihat hidup", "Lampu utama yang menerangi bagian belakang kepala", "Bayangan hitam di bawah hidung subjek", "Cahaya kilat dari flash kamera"], answer: "Pantulan titik cahaya pada mata subjek yang membuatnya terlihat hidup" },
+      { id: 93, q: "Gaya foto 'Siluet' dihasilkan ketika subjek dipotret dengan posisi...", options: ["Membelakangi sumber cahaya utama (backlight kuat)", "Mengerahkan wajah langsung ke arah sumber cahaya", "Menggunakan dua reflektor di samping kiri dan kanan", "Di dalam ruangan tanpa lampu"], answer: "Membelakangi sumber cahaya utama (backlight kuat)" },
+      { id: 94, q: "Proses 'Export' / 'Render' dalam editing video adalah...", options: ["Menggabungkan seluruh klip, efek, dan audio menjadi satu file video utuh", "Mengimpor klip dari memori card ke komputer", "Memotong video menjadi beberapa bagian", "Merekam suara dubbing suara"], answer: "Menggabungkan seluruh klip, efek, dan audio menjadi satu file video utuh" },
+      { id: 95, q: "Codec video H.264 / MP4 sangat populer di internet karena...", options: ["Memberikan rasio kompresi tinggi dengan kualitas gambar yang tetap bagus", "Ukuran filenya selalu paling besar", "Hanya bisa diputar di komputer Mac", "Tidak memiliki saluran audio"], answer: "Memberikan rasio kompresi tinggi dengan kualitas gambar yang tetap bagus" },
+      { id: 96, q: "Resolusi video 'Full HD' memiliki dimensi pixel sebesar...", options: ["1920 x 1080 pixel", "1280 x 720 pixel", "3840 x 2160 pixel", "720 x 480 pixel"], answer: "1920 x 1080 pixel" },
+      { id: 97, q: "Resolusi video '4K Ultra HD' memiliki dimensi pixel sebesar...", options: ["3840 x 2160 pixel", "1920 x 1080 pixel", "2560 x 1440 pixel", "1280 x 720 pixel"], answer: "3840 x 2160 pixel" },
+      { id: 98, q: "Softbox digunakan dalam studio fotografi bertujuan untuk...", options: ["Melembutkan dan menyebarkan cahaya dari lampu flash agar bayangan tidak kasar", "Mengarahkan cahaya menjadi satu garis lurus tajam", "Membuat lampu menjadi berwarna-warni", "Mendinginkan suhu lampu studio"], answer: "Melembutkan dan menyebarkan cahaya dari lampu flash agar bayangan tidak kasar" },
+      { id: 99, q: "Fungsi dari 'Reflector' dalam pemotretan outdoor adalah...", options: ["Memantulkan cahaya alami ke bagian subjek yang gelap/terbayang", "Menyerap cahaya berlebih dari matahari", "Melindungi kamera dari sinar UV", "Merekam bayangan objek"], answer: "Memantulkan cahaya alami ke bagian subjek yang gelap/terbayang" },
+      { id: 100, q: "Aturan 'Golden Ratio' (Rasio Emas) dalam komposisi visual didasarkan pada proporsi matematis sebesar...", options: ["1 : 1.618", "1 : 2.5", "3 : 4", "16 : 9"], answer: "1 : 1.618" }
     ];
 
+    let questions = []; // Akan diisi 50 soal hasil acakan
     let currentIdx = 0;
     let userAnswers = {};
     let studentData = { name: "", nis: "" };
@@ -380,7 +433,21 @@
     let timerInterval = null;
     let timeLeft = 3600;
 
-    // Otomatis Pindai data remidi begitu halaman dimuat
+    // Fungsi Acak Array (Fisher-Yates Shuffle)
+    function shuffleArray(array) {
+      let curId = array.length;
+      let clone = [...array];
+      while (0 !== curId) {
+        let randId = Math.floor(Math.random() * curId);
+        curId -= 1;
+        let tmp = clone[curId];
+        clone[curId] = clone[randId];
+        clone[randId] = tmp;
+      }
+      return clone;
+    }
+
+    // Pindai data remidi begitu halaman dimuat
     window.addEventListener('DOMContentLoaded', () => {
       const savedName = localStorage.getItem('cbt_student_name');
       const savedNis = localStorage.getItem('cbt_student_nis');
@@ -396,7 +463,7 @@
       }
     });
 
-    // Blokir Shortcut & Inspeksi
+    // Blokir Shortcut
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if (
@@ -425,6 +492,20 @@
       studentData.name = nameVal;
       studentData.nis = nisVal;
       document.getElementById('display-student').innerText = `${nameVal} (${nisVal})`;
+
+      // ACAK BANK SOAL (PILIH 50 SOAL DARI 100 SOAL)
+      const shuffledBank = shuffleArray(allQuestionsBank).slice(0, 50);
+
+      // ACAK OPSI JAWABAN TIAP SOAL
+      questions = shuffledBank.map(item => {
+        const shuffledOpts = shuffleArray(item.options);
+        return {
+          id: item.id,
+          q: item.q,
+          options: shuffledOpts,
+          correctAnswerText: item.answer // Mengunci teks jawaban asli
+        };
+      });
 
       requestFullscreenMode();
       document.getElementById('start-overlay').style.display = 'none';
@@ -531,17 +612,20 @@
         const letter = letters[oIdx];
         const btn = document.createElement('button');
         btn.className = 'option-btn';
-        if (userAnswers[questions[idx].id] === letter) {
+        
+        // Cek jika opsi ini sudah dipilih
+        if (userAnswers[questions[idx].id] === optText) {
           btn.classList.add('selected');
         }
-        btn.innerText = optText;
-        btn.onclick = () => selectOption(questions[idx].id, letter);
+        
+        btn.innerText = `${letter}. ${optText}`;
+        btn.onclick = () => selectOption(questions[idx].id, optText);
         container.appendChild(btn);
       });
     }
 
-    function selectOption(qId, letter) {
-      userAnswers[qId] = letter;
+    function selectOption(qId, selectedText) {
+      userAnswers[qId] = selectedText;
       loadQuestion(currentIdx);
 
       const numBtn = document.getElementById(`num-btn-${currentIdx}`);
@@ -565,7 +649,6 @@
       }
     }
 
-    // Fungsi Mengulang Langsung Tanpa Input Nama
     window.restartExamDirectly = function() {
       localStorage.setItem('cbt_auto_restart', 'true');
       window.location.reload();
@@ -574,9 +657,10 @@
     function submitExam(statusReason) {
       clearInterval(timerInterval);
 
+      // PENSKORAN PRESISI (Mencocokkan teks jawaban)
       let correctAnswers = 0;
       questions.forEach(q => {
-        if (userAnswers[q.id] === q.answer) {
+        if (userAnswers[q.id] === q.correctAnswerText) {
           correctAnswers++;
         }
       });
@@ -596,7 +680,6 @@
         answers: userAnswers
       };
 
-      // Kirim Data Rekap ke Google Sheets
       fetch(GAS_WEBAPP_URL, {
         method: 'POST',
         mode: 'no-cors',
@@ -605,7 +688,6 @@
       }).catch(err => console.error("Error submitting:", err));
 
       if (isPassed) {
-        // Jika Lulus, Hapus Penyimpanan Lokal
         localStorage.removeItem('cbt_student_name');
         localStorage.removeItem('cbt_student_nis');
 
@@ -622,7 +704,6 @@
           </div>
         `;
       } else {
-        // Jika Remidi, Sediakan Tombol Langsung Mengulang
         document.body.innerHTML = `
           <div class="overlay">
             <h2 style="color: #ef4444; margin-bottom: 12px;">Nilai Belum Mencapai Target!</h2>
