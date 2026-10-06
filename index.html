@@ -316,6 +316,7 @@
   </div>
 
   <script>
+    // URL Google Apps Script Anda
     const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxan3Ca7thzAZtqo0tmG3YJBpxwZtG5azbqcrGBogXZEzaNDyZ7J9szPGRGnMR3l43fWA/exec";
 
     const questions = [
@@ -379,12 +380,28 @@
     let timerInterval = null;
     let timeLeft = 3600;
 
-    // Blokir Klik Kanan, Inspector & Tombol Windows Key secara eksplisit
+    // Otomatis Pindai data remidi begitu halaman dimuat
+    window.addEventListener('DOMContentLoaded', () => {
+      const savedName = localStorage.getItem('cbt_student_name');
+      const savedNis = localStorage.getItem('cbt_student_nis');
+
+      if (savedName && savedNis) {
+        document.getElementById('student-name').value = savedName;
+        document.getElementById('student-nis').value = savedNis;
+        
+        if (localStorage.getItem('cbt_auto_restart') === 'true') {
+          localStorage.removeItem('cbt_auto_restart');
+          initExam();
+        }
+      }
+    });
+
+    // Blokir Shortcut & Inspeksi
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
       if (
         e.key === 'F12' || 
-        e.key === 'Meta' || // Tombol Windows
+        e.key === 'Meta' || 
         (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
         (e.ctrlKey && e.key === 'u')
       ) {
@@ -401,6 +418,9 @@
         alert("Mohon isi Nama Lengkap dan NIS terlebih dahulu!");
         return;
       }
+
+      localStorage.setItem('cbt_student_name', nameVal);
+      localStorage.setItem('cbt_student_nis', nisVal);
 
       studentData.name = nameVal;
       studentData.nis = nisVal;
@@ -426,23 +446,19 @@
       }
     }
 
-    // Penanganan Anti-Cheat Komprehensif (Termasuk Tombol Windows / Loss Focus)
     function setupAntiCheat() {
-      // 1. Deteksi Pindah Tab / Minimalisir Browser
       document.addEventListener("visibilitychange", () => {
         if (document.hidden && document.getElementById('start-overlay').style.display === 'none') {
           handleViolation("Anda terdeteksi berpindah tab, membuka aplikasi lain, atau meminimalkan browser.");
         }
       });
 
-      // 2. Deteksi Keluar Fullscreen
       document.addEventListener("fullscreenchange", () => {
         if (!document.fullscreenElement && document.getElementById('start-overlay').style.display === 'none') {
           handleViolation("Anda keluar dari mode layar penuh (Fullscreen).");
         }
       });
 
-      // 3. Deteksi Kehilangan Fokus akibat Tekan Tombol Windows / Alt+Tab
       window.addEventListener("blur", () => {
         if (document.getElementById('start-overlay').style.display === 'none') {
           handleViolation("Anda terdeteksi menekan tombol Windows / membuka menu aplikasi luar.");
@@ -549,6 +565,12 @@
       }
     }
 
+    // Fungsi Mengulang Langsung Tanpa Input Nama
+    window.restartExamDirectly = function() {
+      localStorage.setItem('cbt_auto_restart', 'true');
+      window.location.reload();
+    };
+
     function submitExam(statusReason) {
       clearInterval(timerInterval);
 
@@ -574,16 +596,19 @@
         answers: userAnswers
       };
 
-      if (GAS_WEBAPP_URL && !GAS_WEBAPP_URL.includes("...")) {
-        fetch(GAS_WEBAPP_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        }).catch(err => console.error("Error submitting:", err));
-      }
+      // Kirim Data Rekap ke Google Sheets
+      fetch(GAS_WEBAPP_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      }).catch(err => console.error("Error submitting:", err));
 
       if (isPassed) {
+        // Jika Lulus, Hapus Penyimpanan Lokal
+        localStorage.removeItem('cbt_student_name');
+        localStorage.removeItem('cbt_student_nis');
+
         document.body.innerHTML = `
           <div class="overlay">
             <h2 style="color: #22c55e; margin-bottom: 12px;">Selamat, Anda LULUS!</h2>
@@ -597,10 +622,11 @@
           </div>
         `;
       } else {
+        // Jika Remidi, Sediakan Tombol Langsung Mengulang
         document.body.innerHTML = `
           <div class="overlay">
             <h2 style="color: #ef4444; margin-bottom: 12px;">Nilai Belum Mencapai Target!</h2>
-            <p style="color: #cbd5e1; margin-bottom: 8px;">Mohon maaf, <b>${studentData.name}</b>.</p>
+            <p style="color: #cbd5e1; margin-bottom: 8px;">Mohon maaf, <b>${studentData.name} (${studentData.nis})</b>.</p>
             <p style="color: #f87171; font-size: 0.9rem; margin-bottom: 20px;">Batas minimal nilai adalah <b>80</b>. Anda wajib mengulangi ujian ini.</p>
             
             <div style="background: #1e293b; padding: 20px; border-radius: 8px; border: 1px solid #334155; min-width: 260px; text-align: center; margin-bottom: 24px;">
@@ -609,7 +635,7 @@
               <div style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Benar ${correctAnswers} dari ${questions.length} Soal</div>
             </div>
 
-            <button class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;" onclick="location.reload()">
+            <button class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;" onclick="restartExamDirectly()">
               🔄 Mengulang Ujian Sekarang
             </button>
           </div>
@@ -617,7 +643,7 @@
       }
     }
 
-    /* SISTEM KELABANG GARIS-GARIS ANIMATED */
+    /* KELABANG GARIS-GARIS ANIMATED */
     const canvas = document.getElementById('centipede-canvas');
     const ctx = canvas.getContext('2d');
 
