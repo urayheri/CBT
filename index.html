@@ -247,9 +247,19 @@
       outline: none;
       border-color: #2563eb;
     }
+
+    #centipede-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 9998;
+    }
   </style>
 </head>
 <body>
+
+  <!-- Canvas Kelabang -->
+  <canvas id="centipede-canvas"></canvas>
 
   <!-- Overlay Modal Registrasi -->
   <div id="start-overlay" class="overlay">
@@ -285,7 +295,6 @@
     </header>
 
     <main>
-      <!-- Panel Soal -->
       <section class="question-panel">
         <div class="question-header">Soal Nomor <span id="current-num">1</span> dari 50</div>
         <div class="question-text" id="question-text">Loading soal...</div>
@@ -299,7 +308,6 @@
         </div>
       </section>
 
-      <!-- Panel Sidebar Navigasi Nomor -->
       <section class="sidebar-panel">
         <div class="sidebar-title">Navigasi Soal</div>
         <div class="number-grid" id="number-grid"></div>
@@ -308,10 +316,8 @@
   </div>
 
   <script>
-    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
-    const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+    const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxan3Ca7thzAZtqo0tmG3YJBpxwZtG5azbqcrGBogXZEzaNDyZ7J9szPGRGnMR3l43fWA/exec";
 
-    // Data 50 Soal DKV XI (Fotografi & Videografi)
     const questions = [
       { id: 1, q: "Komponen kamera yang berfungsi mengatur tingkat sensitivitas sensor terhadap cahaya adalah...", options: ["A. Aperture", "B. Shutter Speed", "C. ISO", "D. White Balance"], answer: "C" },
       { id: 2, q: "Semakin kecil angka f-stop pada lensa (contoh: f/1.8), maka...", options: ["A. Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit", "B. Bukaan diafragma semakin sempit dan gambar semakin gelap", "C. Sensitivitas sensor meningkat tajam", "D. Kecepatan rana menjadi makin lambat"], answer: "A" },
@@ -365,20 +371,25 @@
       { id: 50, q: "Kesalahan kesinambungan elemen (seperti posisi barang atau baju) antar-shot yang disambung dinamakan pelanggaran...", options: ["A. Rule of Thirds", "B. Continuity", "C. Aspect Ratio", "D. Pacing"], answer: "B" }
     ];
 
-    // State Aplikasi
     let currentIdx = 0;
     let userAnswers = {};
     let studentData = { name: "", nis: "" };
     let cheatViolations = 0;
     const maxViolations = 3;
     let timerInterval = null;
-    let timeLeft = 3600; // 60 menit
+    let timeLeft = 3600;
 
-    // Mencegah Klik Kanan & Shortcut
+    // Blokir Klik Kanan, Inspector & Tombol Windows Key secara eksplisit
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('keydown', e => {
-      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) {
+      if (
+        e.key === 'F12' || 
+        e.key === 'Meta' || // Tombol Windows
+        (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || 
+        (e.ctrlKey && e.key === 'u')
+      ) {
         e.preventDefault();
+        e.stopPropagation();
       }
     });
 
@@ -402,6 +413,8 @@
       loadQuestion(0);
       startTimer();
       setupAntiCheat();
+
+      setTimeout(spawnProceduralCentipede, 10000);
     }
 
     function requestFullscreenMode() {
@@ -413,16 +426,26 @@
       }
     }
 
+    // Penanganan Anti-Cheat Komprehensif (Termasuk Tombol Windows / Loss Focus)
     function setupAntiCheat() {
+      // 1. Deteksi Pindah Tab / Minimalisir Browser
       document.addEventListener("visibilitychange", () => {
         if (document.hidden && document.getElementById('start-overlay').style.display === 'none') {
           handleViolation("Anda terdeteksi berpindah tab, membuka aplikasi lain, atau meminimalkan browser.");
         }
       });
 
+      // 2. Deteksi Keluar Fullscreen
       document.addEventListener("fullscreenchange", () => {
         if (!document.fullscreenElement && document.getElementById('start-overlay').style.display === 'none') {
           handleViolation("Anda keluar dari mode layar penuh (Fullscreen).");
+        }
+      });
+
+      // 3. Deteksi Kehilangan Fokus akibat Tekan Tombol Windows / Alt+Tab
+      window.addEventListener("blur", () => {
+        if (document.getElementById('start-overlay').style.display === 'none') {
+          handleViolation("Anda terdeteksi menekan tombol Windows / membuka menu aplikasi luar.");
         }
       });
     }
@@ -526,7 +549,6 @@
       }
     }
 
-    // Submit & Logika Remidi Otomatis
     function submitExam(statusReason) {
       clearInterval(timerInterval);
 
@@ -562,7 +584,6 @@
       }
 
       if (isPassed) {
-        // Tampilan LULUS (Nilai >= 80)
         document.body.innerHTML = `
           <div class="overlay">
             <h2 style="color: #22c55e; margin-bottom: 12px;">Selamat, Anda LULUS!</h2>
@@ -576,7 +597,6 @@
           </div>
         `;
       } else {
-        // Tampilan REMIDI (Nilai < 80)
         document.body.innerHTML = `
           <div class="overlay">
             <h2 style="color: #ef4444; margin-bottom: 12px;">Nilai Belum Mencapai Target!</h2>
@@ -596,6 +616,174 @@
         `;
       }
     }
+
+    /* SISTEM KELABANG GARIS-GARIS ANIMATED */
+    const canvas = document.getElementById('centipede-canvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    let centipede = null;
+
+    class Centipede {
+      constructor() {
+        this.numSegments = 16;
+        this.segmentLength = 8;
+        this.x = -100;
+        this.y = Math.random() * (canvas.height - 200) + 100;
+        this.angle = 0;
+        this.speed = 2.2;
+        this.health = 5;
+        this.isDead = false;
+        this.squishFactor = 1;
+        this.legWiggle = 0;
+
+        this.segments = [];
+        for (let i = 0; i < this.numSegments; i++) {
+          this.segments.push({ x: this.x - i * this.segmentLength, y: this.y });
+        }
+      }
+
+      update() {
+        if (this.isDead) {
+          if (this.squishFactor > 0.1) this.squishFactor -= 0.05;
+          return;
+        }
+
+        this.legWiggle += 0.3;
+        this.angle += Math.sin(this.legWiggle * 0.3) * 0.05;
+
+        this.x += Math.cos(this.angle) * this.speed;
+        this.y += Math.sin(this.angle) * this.speed;
+        this.segments[0] = { x: this.x, y: this.y };
+
+        for (let i = 1; i < this.numSegments; i++) {
+          const prev = this.segments[i - 1];
+          const curr = this.segments[i];
+          const dx = prev.x - curr.x;
+          const dy = prev.y - curr.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist > 0) {
+            curr.x = prev.x - (dx / dist) * this.segmentLength;
+            curr.y = prev.y - (dy / dist) * this.segmentLength;
+          }
+        }
+      }
+
+      draw() {
+        ctx.save();
+        for (let i = this.numSegments - 1; i >= 0; i--) {
+          const seg = this.segments[i];
+          const nextSeg = this.segments[i - 1] || seg;
+          const segAngle = Math.atan2(nextSeg.y - seg.y, nextSeg.x - seg.x);
+
+          ctx.save();
+          ctx.translate(seg.x, seg.y);
+          ctx.rotate(segAngle);
+          ctx.scale(1, this.squishFactor);
+
+          if (i > 0 && i < this.numSegments - 1) {
+            ctx.strokeStyle = '#ea580c';
+            ctx.lineWidth = 2;
+
+            const legWave = Math.sin(this.legWiggle + i * 0.6) * 10;
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-2, -14 - legWave);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(0, 0);
+            ctx.lineTo(-2, 14 + legWave);
+            ctx.stroke();
+          }
+
+          ctx.fillStyle = i === 0 ? '#b91c1c' : '#c2410c';
+          ctx.beginPath();
+          ctx.ellipse(0, 0, 6, 4, 0, 0, Math.PI * 2);
+          ctx.fill();
+
+          if (i === 0) {
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 1.5;
+            
+            ctx.beginPath();
+            ctx.moveTo(4, -2);
+            ctx.lineTo(16, -10);
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.moveTo(4, 2);
+            ctx.lineTo(16, 10);
+            ctx.stroke();
+          }
+
+          ctx.restore();
+        }
+        ctx.restore();
+      }
+
+      hitTest(mx, my) {
+        for (let seg of this.segments) {
+          const dx = mx - seg.x;
+          const dy = my - seg.y;
+          if (Math.sqrt(dx * dx + dy * dy) < 22) {
+            return true;
+          }
+        }
+        return false;
+      }
+    }
+
+    function animateCentipede() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      if (centipede) {
+        centipede.update();
+        centipede.draw();
+
+        if (centipede.x > canvas.width + 150) {
+          centipede = null;
+        }
+      }
+
+      requestAnimationFrame(animateCentipede);
+    }
+    animateCentipede();
+
+    function spawnProceduralCentipede() {
+      if (document.getElementById('start-overlay').style.display !== 'none') return;
+      if (!centipede) {
+        centipede = new Centipede();
+      }
+    }
+
+    window.addEventListener('click', (e) => {
+      if (centipede && !centipede.isDead) {
+        if (centipede.hitTest(e.clientX, e.clientY)) {
+          centipede.health--;
+          centipede.speed += 0.5;
+
+          if (centipede.health <= 0) {
+            centipede.isDead = true;
+            setTimeout(() => {
+              centipede = null;
+            }, 2000);
+          }
+        }
+      }
+    });
+
+    setInterval(() => {
+      if (Math.random() > 0.3) {
+        spawnProceduralCentipede();
+      }
+    }, 40000);
   </script>
 </body>
 </html>
