@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>CBT Ujian DKV XI - Fotografi & Videografi</title>
+  <style>
+    /* Reset & Kunci Layout Anti-Geser */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+    }
+
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background-color: #0f172a;
+      color: #f8fafc;
+      font-family: system-ui, -apple-system, sans-serif;
+      touch-action: pan-y;
+    }
+
+    #app-container {
+      display: flex;
+      flex-direction: column;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    header {
+      height: 56px;
+      background: #1e293b;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 16px;
+      border-bottom: 1px solid #334155;
+      flex-shrink: 0;
+    }
+
+    .header-title {
+      font-weight: bold;
+      font-size: 0.95rem;
+      color: #38bdf8;
+    }
+
+    .timer {
+      font-weight: bold;
+      color: #f59e0b;
+      font-size: 1.1rem;
+      background: #0f172a;
+      padding: 4px 12px;
+      border-radius: 6px;
+      border: 1px solid #334155;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    @media (min-width: 768px) {
+      main {
+        flex-direction: row;
+      }
+    }
+
+    .question-panel {
+      flex: 1;
+      padding: 16px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .question-header {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+    }
+
+    .question-text {
+      font-size: 1.05rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      font-weight: 500;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .option-btn {
+      padding: 14px 16px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      color: #f8fafc;
+      text-align: left;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+    }
+
+    .option-btn:hover {
+      background: #334155;
+    }
+
+    .option-btn.selected {
+      background: #2563eb;
+      border-color: #60a5fa;
+      font-weight: bold;
+    }
+
+    .nav-controls {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: auto;
+      padding-top: 10px;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+
+    .btn-secondary { background: #334155; color: white; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-success { background: #16a34a; color: white; }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .sidebar-panel {
+      width: 100%;
+      background: #1e293b;
+      border-top: 1px solid #334155;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      max-height: 200px;
+    }
+
+    @media (min-width: 768px) {
+      .sidebar-panel {
+        width: 280px;
+        max-height: 100%;
+        border-top: none;
+        border-left: 1px solid #334155;
+      }
+    }
+
+    .sidebar-title {
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .number-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(40px, 1fr));
+      gap: 6px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .num-btn {
+      aspect-ratio: 1;
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .num-btn.active {
+      border-color: #38bdf8;
+      box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.3);
+    }
+
+    .num-btn.answered {
+      background: #16a34a;
+      color: white;
+      border-color: #22c55e;
+    }
+
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.98);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 24px;
+    }
+
+    .form-group {
+      width: 100%;
+      max-width: 320px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.85rem;
+      color: #94a3b8;
+      margin-bottom: 6px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: #2563eb;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay Modal Registrasi -->
+  <div id="start-overlay" class="overlay">
+    <h2 style="color: #38bdf8; margin-bottom: 8px;">Ujian CBT DKV Kelas XI</h2>
+    <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px;">Materi: Dasar & Teknik Fotografi - Videografi</p>
+    <p style="color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">⚠️ Target Nilai Ketuntasan Minimal: 80</p>
+    
+    <div class="form-group">
+      <label for="student-name">Nama Lengkap Siswa:</label>
+      <input type="text" id="student-name" placeholder="Masukkan nama lengkap..." autocomplete="off">
+    </div>
+    
+    <div class="form-group">
+      <label for="student-nis">NIS / NISN:</label>
+      <input type="text" id="student-nis" placeholder="Masukkan NIS..." autocomplete="off">
+    </div>
+
+    <button class="btn btn-primary" style="width: 100%; max-width: 320px; padding: 14px; margin-top: 8px;" onclick="initExam()">Mulai Ujian Fullscreen</button>
+  </div>
+
+  <!-- Overlay Peringatan Pelanggaran -->
+  <div id="warning-overlay" class="overlay" style="display: none;">
+    <h2 style="color: #ef4444; margin-bottom: 12px;">Peringatan Keamanan!</h2>
+    <p id="warning-msg" style="color: #cbd5e1; margin-bottom: 20px; max-width: 400px; line-height: 1.5;"></p>
+    <button class="btn btn-primary" onclick="resumeExam()">Kembali ke Mode Fullscreen</button>
+  </div>
+
+  <!-- Aplikasi CBT Utama -->
+  <div id="app-container">
+    <header>
+      <div class="header-title">CBT DKV XI | <span id="display-student">-</span></div>
+      <div class="timer" id="timer-display">60:00</div>
+    </header>
+
+    <main>
+      <!-- Panel Soal -->
+      <section class="question-panel">
+        <div class="question-header">Soal Nomor <span id="current-num">1</span> dari 50</div>
+        <div class="question-text" id="question-text">Loading soal...</div>
+        
+        <div class="options-list" id="options-container"></div>
+
+        <div class="nav-controls">
+          <button class="btn btn-secondary" id="btn-prev" onclick="changeQuestion(-1)">Sebelumnya</button>
+          <button class="btn btn-secondary" id="btn-next" onclick="changeQuestion(1)">Berikutnya</button>
+          <button class="btn btn-success" id="btn-submit" onclick="confirmSubmit()">Selesai & Kirim</button>
+        </div>
+      </section>
+
+      <!-- Panel Sidebar Navigasi Nomor -->
+      <section class="sidebar-panel">
+        <div class="sidebar-title">Navigasi Soal</div>
+        <div class="number-grid" id="number-grid"></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    // MASUKKAN URL GOOGLE APPS SCRIPT ANDA DI SINI
+    const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbx.../exec";
+
+    // Data 50 Soal DKV XI (Fotografi & Videografi)
+    const questions = [
+      { id: 1, q: "Komponen kamera yang berfungsi mengatur tingkat sensitivitas sensor terhadap cahaya adalah...", options: ["A. Aperture", "B. Shutter Speed", "C. ISO", "D. White Balance"], answer: "C" },
+      { id: 2, q: "Semakin kecil angka f-stop pada lensa (contoh: f/1.8), maka...", options: ["A. Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit", "B. Bukaan diafragma semakin sempit dan gambar semakin gelap", "C. Sensitivitas sensor meningkat tajam", "D. Kecepatan rana menjadi makin lambat"], answer: "A" },
+      { id: 3, q: "Fitur pada kamera yang digunakan untuk menyelaraskan warna putih agar objek terlihat alami dalam kondisi pencahayaan berbeda adalah...", options: ["A. Focus Mode", "B. ISO", "C. White Balance", "D. Exposure Compensation"], answer: "C" },
+      { id: 4, q: "Kombinasi segitiga eksposure yang tepat saat mengambil foto objek bergerak cepat (panning/freezing) ditentukan oleh pengaturan utama pada...", options: ["A. Aperture", "B. Shutter Speed", "C. Focal Length", "D. Picture Profile"], answer: "B" },
+      { id: 5, q: "Penggunaan ISO tinggi (misal: ISO 6400) pada kondisi minim cahaya akan menimbulkan efek samping berupa...", options: ["A. Gambar menjadi blur", "B. Bintik-bintik digital (noise)", "C. Lensa menjadi panas", "D. Warna foto menjadi terlalu kontras"], answer: "B" },
+      { id: 6, q: "Efek bokeh (latar belakang kabur) paling mudah didapatkan jika kita menggunakan...", options: ["A. Diafragma f/22 dan lensa sudut lebar", "B. Diafragma f/1.4 dan jarak fokus dekat ke objek", "C. Shutter speed 1/1000 detik dan ISO rendah", "D. Shutter speed 2 detik dan tripod"], answer: "B" },
+      { id: 7, q: "Teknik fotografi yang menghasilkan jejak cahaya kendaraan pada malam hari dinamakan...", options: ["A. High Speed Photography", "B. Macro Photography", "C. Long Exposure / Slow Shutter", "D. Freeze Motion"], answer: "C" },
+      { id: 8, q: "Jenis lensa yang memiliki panjang fokus bervariasi (dapat diubah zoom-in/zoom-out) dinamakan...", options: ["A. Lensa Fix / Prime", "B. Lensa Zoom", "C. Lensa Fisheye", "D. Lensa Anamorphic"], answer: "B" },
+      { id: 9, q: "Fungsi utama dari tombol Shutter Release ditekan setengah jalan (half-press) adalah untuk...", options: ["A. Mengunci fokus dan mengukur eksposure (metering)", "B. Langsung mengambil gambar", "C. Membuka diafragma secara otomatis", "D. Mengubah nilai ISO"], answer: "A" },
+      { id: 10, q: "Format file foto mentah yang menyimpan seluruh data informasi dari sensor tanpa kompresi adalah...", options: ["A. JPEG", "B. PNG", "C. RAW", "D. TIFF"], answer: "C" },
+      { id: 11, q: "Satuan kecepatan rana (shutter speed) pada kamera umumnya diukur dalam hitungan...", options: ["A. Milimeter (mm)", "B. Detik atau pecahan detik", "C. Kelvin (K)", "D. Megapixel (MP)"], answer: "B" },
+      { id: 12, q: "Lensa yang memiliki sudut pandang sangat lebar hingga mencapai 180 derajat dan menghasilkan efek cembung dinamakan...", options: ["A. Lensa Telephoto", "B. Lensa Macro", "C. Lensa Fisheye", "D. Lensa Standard"], answer: "C" },
+      { id: 13, q: "Apabila hasil foto tampak sangat putih dan kehilangan detail karena terlalu banyak cahaya yang masuk, kondisi tersebut dinamakan...", options: ["A. Under-exposed", "B. Over-exposed", "C. Out of focus", "D. High Contrast"], answer: "B" },
+      { id: 14, q: "Skala suhu warna White Balance dinyatakan dalam satuan...", options: ["A. Celcius", "B. Fahrenheit", "C. Kelvin", "D. Diopter"], answer: "C" },
+      { id: 15, q: "Bagian kamera refleks yang berfungsi memantulkan cahaya dari lensa ke viewfinder dinamakan...", options: ["A. Cermin Pentaprisma / Mirror", "B. Diopter", "C. Sensor CMOS", "D. Shutter Curtain"], answer: "A" },
+      { id: 16, q: "Aturan komposisi yang membagi bingkai foto menjadi 9 bagian sejajar melalui 2 garis horizontal dan 2 garis vertikal adalah...", options: ["A. Golden Ratio", "B. Rule of Thirds", "C. Symmetry", "D. Framing Technique"], answer: "B" },
+      { id: 17, q: "Teknik komposisi yang memanfaatkan elemen di sekitar objek (seperti jendela atau bingkai pintu) untuk mengarahkan pandangan ke objek utama dinamakan...", options: ["A. Leading Lines", "B. Framing", "C. Fill the Frame", "D. Pattern"], answer: "B" },
+      { id: 18, q: "Sudut pengambilan gambar di mana posisi kamera berada lebih rendah dari objek sehingga objek terlihat megah dan berwibawa dinamakan...", options: ["A. High Angle", "B. Eye Level", "C. Low Angle", "D. Bird Eye View"], answer: "C" },
+      { id: 19, q: "Pengambilan foto dari ketinggian tegak lurus mengarah ke bawah menyerupai pandangan burung dinamakan...", options: ["A. Bird Eye View", "B. Frog Eye View", "C. High Angle", "D. Top Angle"], answer: "A" },
+      { id: 20, q: "Elemen garis dalam foto yang berfungsi menuntun mata pengamat menuju ke subjek utama dinamakan...", options: ["A. Vanishing Point", "B. Leading Lines", "C. Horizon Line", "D. Diagonals"], answer: "B" },
+      { id: 21, q: "Mengisi seluruh bingkai foto penuh dengan subjek utama tanpa menyisakan ruang kosong dinamakan teknik...", options: ["A. Negative Space", "B. Fill the Frame", "C. Centered Composition", "D. Minimalist"], answer: "B" },
+      { id: 22, q: "Ruang kosong di sekitar subjek utama yang berfungsi memberikan kesan bernapas dan fokus pada subjek dinamakan...", options: ["A. Negative Space", "B. Headroom", "C. Looking Room", "D. Background"], answer: "A" },
+      { id: 23, q: "Sudut pandang kamera sejajar dengan ketinggian mata objek yang diambil dinamakan...", options: ["A. Low Angle", "B. Top Angle", "C. Eye Level", "D. Dutch Angle"], answer: "C" },
+      { id: 24, q: "Sudut kamera yang sengaja dimiringkan untuk menciptakan kesan ketegangan atau drama dinamakan...", options: ["A. Bird Eye View", "B. Dutch Angle / Tilt Angle", "C. Frog Eye View", "D. High Angle"], answer: "B" },
+      { id: 25, q: "Aturan Headroom dalam komposisi foto/video portrait mengatur tentang...", options: ["A. Jarak ruang antara bagian atas kepala subjek dengan batas atas bingkai", "B. Jarak antara pandangan mata subjek ke arah samping", "C. Ketinggian lensa dari bahu subjek", "D. Pencahayaan di atas kepala subjek"], answer: "A" },
+      { id: 26, q: "Jumlah bingkai gambar yang diputar dalam satu detik video dinyatakan dalam satuan...", options: ["A. Bitrate", "B. Resolution", "C. FPS (Frames Per Second)", "D. Aspect Ratio"], answer: "C" },
+      { id: 27, q: "Standar Frame Rate yang umum digunakan dalam penayangan sinema/film komersial adalah...", options: ["A. 15 fps", "B. 24 fps", "C. 60 fps", "D. 120 fps"], answer: "B" },
+      { id: 28, q: "Jenis ukuran shot (shot size) yang menampilkan seluruh tubuh manusia beserta lingkungan di sekitarnya secara sangat luas dinamakan...", options: ["A. Medium Shot", "B. Close-Up", "C. Extreme Long Shot (ELS)", "D. Full Shot"], answer: "C" },
+      { id: 29, q: "Ukuran shot yang menampilkan objek manusia dari batas pinggang hingga atas kepala dinamakan...", options: ["A. Close-Up", "B. Medium Shot (MS)", "C. Extreme Close-Up", "D. Long Shot"], answer: "B" },
+      { id: 30, q: "Shot yang difokuskan pada detail sangat spesifik seperti mata, jemari, atau tulisan pada surat dinamakan...", options: ["A. Big Close-Up", "B. Extreme Close-Up (ECU)", "C. Medium Close-Up", "D. Detail Shot"], answer: "B" },
+      { id: 31, q: "Over the Shoulder Shot (OTS) umumnya digunakan dalam adegan...", options: ["A. Pemandangan alam", "B. Olahraga ekstrim", "C. Percakapan antara dua orang karakter", "D. Aksi kejar-kejaran mobil"], answer: "C" },
+      { id: 32, q: "Rasio aspek standar layar monitor widescreen modern dan video YouTube adalah...", options: ["A. 4:3", "B. 1:1", "C. 16:9", "D. 9:16"], answer: "C" },
+      { id: 33, q: "Perbedaan utama antara video Interlaced (1080i) dan Progressive (1080p) terletak pada...", options: ["A. Cara pemindaian baris gambar (ganjil-genap vs berurutan)", "B. Jumlah audio track", "C. Warna video yang dihasilkan", "D. Ukuran resolusi horizontal"], answer: "A" },
+      { id: 34, q: "Ruang kosong di depan arah pandang wajah objek dinamakan...", options: ["A. Headroom", "B. Looking Room / Noseroom", "C. Walking Room", "D. Lead Room"], answer: "B" },
+      { id: 35, q: "Point of View (POV) shot adalah pengambilan gambar yang menunjukkan...", options: ["A. Sudut pandang sutradara", "B. Sudut pandang mata dari karakter dalam film", "C. Penonton dari balik layar", "D. Sudut pandang dari atas udara"], answer: "B" },
+      { id: 36, q: "Pergerakan kepala kamera secara horizontal dari kiri ke kanan atau sebaliknya tanpa menggeser kaki tripod dinamakan...", options: ["A. Panning", "B. Tilting", "C. Dolly", "D. Pedestal"], answer: "A" },
+      { id: 37, q: "Pergerakan kepala kamera secara vertikal (ke atas atau ke bawah) pada porosnya dinamakan...", options: ["A. Panning", "B. Tilting", "C. Tracking", "D. Crab"], answer: "B" },
+      { id: 38, q: "Menggerakkan seluruh badan kamera mendekati atau menjauhi objek menggunakan rek/roda dinamakan...", options: ["A. Zoom In / Zoom Out", "B. Dolly In / Dolly Out", "C. Pan Left / Pan Right", "D. Tilt Up / Tilt Down"], answer: "B" },
+      { id: 39, q: "Menggerakkan kamera secara fisik sejajar menyamping di sebelah objek yang sedang berjalan dinamakan...", options: ["A. Pedestal", "B. Arc", "C. Crab / Tracking Shot", "D. Tilting"], answer: "C" },
+      { id: 40, q: "Perbedaan mendasar antara Zoom In dan Dolly In adalah...", options: ["A. Zoom mengubah focal length lensa, sedangkan Dolly memindahkan posisi kamera secara fisik", "B. Zoom membutuhkan roda, Dolly menggunakan tombol", "C. Zoom tidak mengubah perspektif latar belakang", "D. Dolly membuat gambar menjadi blur"], answer: "A" },
+      { id: 41, q: "Dalam teknik Three-Point Lighting, cahaya utama yang paling terang dan difokuskan pada objek dinamakan...", options: ["A. Key Light", "B. Fill Light", "C. Back Light", "D. Ambient Light"], answer: "A" },
+      { id: 42, q: "Fungsi dari Fill Light pada tata cahaya 3 titik adalah...", options: ["A. Memisahkan subjek dari latar belakang", "B. Mengisi/mengurangi bayangan tajam yang dihasilkan oleh Key Light", "C. Menerangi latar belakang secara penuh", "D. Memberikan efek kilau pada rambut"], answer: "B" },
+      { id: 43, q: "Lampu yang diletakkan di belakang subjek mengarah ke kamera untuk memberi garis batas (rim light) dinamakan...", options: ["A. Key Light", "B. Fill Light", "C. Back Light", "D. Practical Light"], answer: "C" },
+      { id: 44, q: "Menggerakkan posisi fisik kamera naik atau turun secara vertikal dinamakan...", options: ["A. Tilting", "B. Pedestal (Ped Up / Ped Down)", "C. Dolly", "D. Rolling"], answer: "B" },
+      { id: 45, q: "Alat bantu penstabil gerak kamera saat videografer mengambil gambar sambil berjalan dinamakan...", options: ["A. Monopod", "B. Slider", "C. Gimbal / Steadicam", "D. Rig Shoulder"], answer: "C" },
+      { id: 46, q: "Sketsa gambar berurutan yang disusun beserta deskripsi adegan untuk merencanakan alur shot film dinamakan...", options: ["A. Naskah / Script", "B. Storyboard", "C. Floorplan", "D. Call Sheet"], answer: "B" },
+      { id: 47, q: "Pemotongan adegan video dari satu shot ke shot lain secara langsung tanpa jeda transisi dinamakan...", options: ["A. Cut", "B. Dissolve", "C. Fade Out", "D. Wipe"], answer: "A" },
+      { id: 48, q: "Transisi video di mana gambar perlahan menghilang menjadi warna hitam dinamakan...", options: ["A. Cross Dissolve", "B. Fade to Black", "C. Cut on Action", "D. Jump Cut"], answer: "B" },
+      { id: 49, q: "Proses penyesuaian dan koreksi warna pada video agar memiliki gaya visual (mood/look) tertentu dinamakan...", options: ["A. Color Correction", "B. Color Grading", "C. Rendering", "D. Compositing"], answer: "B" },
+      { id: 50, q: "Kesalahan kesinambungan elemen (seperti posisi barang atau baju) antar-shot yang disambung dinamakan pelanggaran...", options: ["A. Rule of Thirds", "B. Continuity", "C. Aspect Ratio", "D. Pacing"], answer: "B" }
+    ];
+
+    // State Aplikasi
+    let currentIdx = 0;
+    let userAnswers = {};
+    let studentData = { name: "", nis: "" };
+    let cheatViolations = 0;
+    const maxViolations = 3;
+    let timerInterval = null;
+    let timeLeft = 3600; // 60 menit
+
+    // Mencegah Klik Kanan & Shortcut
+    document.addEventListener('contextmenu', e => e.preventDefault());
+    document.addEventListener('keydown', e => {
+      if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J')) || (e.ctrlKey && e.key === 'u')) {
+        e.preventDefault();
+      }
+    });
+
+    function initExam() {
+      const nameVal = document.getElementById('student-name').value.trim();
+      const nisVal = document.getElementById('student-nis').value.trim();
+
+      if (!nameVal || !nisVal) {
+        alert("Mohon isi Nama Lengkap dan NIS terlebih dahulu!");
+        return;
+      }
+
+      studentData.name = nameVal;
+      studentData.nis = nisVal;
+      document.getElementById('display-student').innerText = `${nameVal} (${nisVal})`;
+
+      requestFullscreenMode();
+      document.getElementById('start-overlay').style.display = 'none';
+
+      buildNumberGrid();
+      loadQuestion(0);
+      startTimer();
+      setupAntiCheat();
+    }
+
+    function requestFullscreenMode() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+      } else if (elem.webkitRequestFullscreen) {
+        elem.webkitRequestFullscreen();
+      }
+    }
+
+    function setupAntiCheat() {
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden && document.getElementById('start-overlay').style.display === 'none') {
+          handleViolation("Anda terdeteksi berpindah tab, membuka aplikasi lain, atau meminimalkan browser.");
+        }
+      });
+
+      document.addEventListener("fullscreenchange", () => {
+        if (!document.fullscreenElement && document.getElementById('start-overlay').style.display === 'none') {
+          handleViolation("Anda keluar dari mode layar penuh (Fullscreen).");
+        }
+      });
+    }
+
+    function handleViolation(reasonText) {
+      cheatViolations++;
+      if (cheatViolations >= maxViolations) {
+        alert(`Batas pelanggaran keamanan tercapai (${cheatViolations}/${maxViolations}). Jawaban Anda akan di-submit otomatis.`);
+        submitExam("Diskualifikasi: Pelanggaran Keamanan Berulang");
+      } else {
+        document.getElementById('warning-msg').innerText = `${reasonText}\n\nPeringatan (${cheatViolations}/${maxViolations}). Jika mencapai ${maxViolations} kali, ujian akan dihentikan secara otomatis.`;
+        document.getElementById('warning-overlay').style.display = 'flex';
+      }
+    }
+
+    function resumeExam() {
+      requestFullscreenMode();
+      document.getElementById('warning-overlay').style.display = 'none';
+    }
+
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        const mins = Math.floor(timeLeft / 60);
+        const secs = timeLeft % 60;
+        document.getElementById('timer-display').innerText = 
+          `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Waktu ujian telah habis!");
+          submitExam("Waktu Habis");
+        }
+      }, 1000);
+    }
+
+    function buildNumberGrid() {
+      const grid = document.getElementById('number-grid');
+      grid.innerHTML = '';
+      for (let i = 0; i < questions.length; i++) {
+        const btn = document.createElement('button');
+        btn.className = 'num-btn';
+        btn.id = `num-btn-${i}`;
+        btn.innerText = i + 1;
+        btn.onclick = () => loadQuestion(i);
+        grid.appendChild(btn);
+      }
+    }
+
+    function loadQuestion(idx) {
+      currentIdx = idx;
+      document.getElementById('current-num').innerText = idx + 1;
+      document.getElementById('question-text').innerText = questions[idx].q;
+
+      document.getElementById('btn-prev').disabled = (idx === 0);
+      document.getElementById('btn-next').disabled = (idx === questions.length - 1);
+
+      document.querySelectorAll('.num-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+      });
+
+      const container = document.getElementById('options-container');
+      container.innerHTML = '';
+
+      const letters = ['A', 'B', 'C', 'D'];
+      questions[idx].options.forEach((optText, oIdx) => {
+        const letter = letters[oIdx];
+        const btn = document.createElement('button');
+        btn.className = 'option-btn';
+        if (userAnswers[questions[idx].id] === letter) {
+          btn.classList.add('selected');
+        }
+        btn.innerText = optText;
+        btn.onclick = () => selectOption(questions[idx].id, letter);
+        container.appendChild(btn);
+      });
+    }
+
+    function selectOption(qId, letter) {
+      userAnswers[qId] = letter;
+      loadQuestion(currentIdx);
+
+      const numBtn = document.getElementById(`num-btn-${currentIdx}`);
+      if (numBtn) {
+        numBtn.classList.add('answered');
+      }
+    }
+
+    function changeQuestion(dir) {
+      const newIdx = currentIdx + dir;
+      if (newIdx >= 0 && newIdx < questions.length) {
+        loadQuestion(newIdx);
+      }
+    }
+
+    function confirmSubmit() {
+      const answeredCount = Object.keys(userAnswers).length;
+      const total = questions.length;
+      if (confirm(`Anda telah menjawab ${answeredCount} dari ${total} soal.\nApakah Anda yakin ingin menyelesaikan ujian?`)) {
+        submitExam("Selesai Normal");
+      }
+    }
+
+    // Submit & Logika Remidi Otomatis
+    function submitExam(statusReason) {
+      clearInterval(timerInterval);
+
+      let correctAnswers = 0;
+      questions.forEach(q => {
+        if (userAnswers[q.id] === q.answer) {
+          correctAnswers++;
+        }
+      });
+
+      const finalScore = (correctAnswers / questions.length) * 100;
+      const isPassed = finalScore >= 80;
+      const statusLulus = isPassed ? "LULUS" : "REMIDI (Wajib Ulang)";
+
+      const payload = {
+        name: studentData.name,
+        nis: studentData.nis,
+        score: finalScore,
+        correctCount: correctAnswers,
+        totalQuestions: questions.length,
+        status: `${statusReason} | ${statusLulus}`,
+        violations: cheatViolations,
+        answers: userAnswers
+      };
+
+      if (GAS_WEBAPP_URL && !GAS_WEBAPP_URL.includes("...")) {
+        fetch(GAS_WEBAPP_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        }).catch(err => console.error("Error submitting:", err));
+      }
+
+      if (isPassed) {
+        // Tampilan LULUS (Nilai >= 80)
+        document.body.innerHTML = `
+          <div class="overlay">
+            <h2 style="color: #22c55e; margin-bottom: 12px;">Selamat, Anda LULUS!</h2>
+            <p style="color: #cbd5e1; margin-bottom: 8px;">Terima kasih, <b>${studentData.name}</b>.</p>
+            <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px;">Nilai Anda telah memenuhi batas minimal ketuntasan (KKM 80).</p>
+            <div style="background: #1e293b; padding: 20px; border-radius: 8px; border: 1px solid #334155; min-width: 260px; text-align: center;">
+              <div style="font-size: 0.85rem; color: #94a3b8;">Nilai Akhir:</div>
+              <div style="font-size: 2.8rem; font-weight: bold; color: #22c55e;">${finalScore.toFixed(1)}</div>
+              <div style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Benar ${correctAnswers} dari ${questions.length} Soal</div>
+            </div>
+          </div>
+        `;
+      } else {
+        // Tampilan REMIDI (Nilai < 80)
+        document.body.innerHTML = `
+          <div class="overlay">
+            <h2 style="color: #ef4444; margin-bottom: 12px;">Nilai Belum Mencapai Target!</h2>
+            <p style="color: #cbd5e1; margin-bottom: 8px;">Mohon maaf, <b>${studentData.name}</b>.</p>
+            <p style="color: #f87171; font-size: 0.9rem; margin-bottom: 20px;">Batas minimal nilai adalah <b>80</b>. Anda wajib mengulangi ujian ini.</p>
+            
+            <div style="background: #1e293b; padding: 20px; border-radius: 8px; border: 1px solid #334155; min-width: 260px; text-align: center; margin-bottom: 24px;">
+              <div style="font-size: 0.85rem; color: #94a3b8;">Nilai Percobaan Ini:</div>
+              <div style="font-size: 2.8rem; font-weight: bold; color: #ef4444;">${finalScore.toFixed(1)}</div>
+              <div style="font-size: 0.85rem; color: #cbd5e1; margin-top: 4px;">Benar ${correctAnswers} dari ${questions.length} Soal</div>
+            </div>
+
+            <button class="btn btn-primary" style="padding: 14px 28px; font-size: 1rem;" onclick="location.reload()">
+              🔄 Mengulang Ujian Sekarang
+            </button>
+          </div>
+        `;
+      }
+    }
+  </script>
+</body>
+</html>
