@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-  <title>CBT Ujian DKV XI - Secure Anti-SS & Anti-OCR AI</title>
+  <title>CBT Ujian DKV XI - Anti-Photo & Anti-OCR Shield</title>
   <style>
-    /* Reset & Kunci Fitur Proteksi Teks */
+    /* Reset & Kunci Proteksi Teks */
     * {
       box-sizing: border-box;
       margin: 0;
@@ -17,19 +17,16 @@
       -webkit-touch-callout: none !important;
     }
 
-    /* Mencegah Hasil Cetak / Print Screen */
     @media print {
-      html, body {
-        display: none !important;
-      }
+      html, body { display: none !important; }
     }
 
     html, body {
       width: 100vw;
       height: 100vh;
       overflow: hidden;
-      background-color: #0f172a;
-      color: #f8fafc;
+      background-color: #0b0f19;
+      color: #cbd5e1;
       font-family: system-ui, -apple-system, sans-serif;
       touch-action: pan-y;
     }
@@ -79,9 +76,7 @@
     }
 
     @media (min-width: 768px) {
-      main {
-        flex-direction: row;
-      }
+      main { flex-direction: row; }
     }
 
     .question-panel {
@@ -99,15 +94,16 @@
       margin-bottom: 8px;
     }
 
-    /* Canvas Render Soal (Mengagalkan OCR AI & Copy Teks) */
+    /* Canvas Render Soal Anti-OCR & Anti-Kamera */
     #question-canvas {
       width: 100%;
       height: auto;
       min-height: 120px;
       margin-bottom: 15px;
-      background: #1e293b;
-      border: 1px solid #334155;
+      background: #111827;
+      border: 1px solid #1f2937;
       border-radius: 8px;
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
     }
 
     .options-list {
@@ -123,7 +119,7 @@
       background: #1e293b;
       border: 1px solid #334155;
       border-radius: 8px;
-      color: #f8fafc;
+      color: #e2e8f0;
       text-align: left;
       font-size: 0.95rem;
       cursor: pointer;
@@ -132,14 +128,13 @@
       align-items: center;
     }
 
-    .option-btn:hover {
-      background: #334155;
-    }
+    .option-btn:hover { background: #334155; }
 
     .option-btn.selected {
       background: #2563eb;
       border-color: #60a5fa;
       font-weight: bold;
+      color: #ffffff;
     }
 
     .nav-controls {
@@ -229,7 +224,7 @@
     .overlay {
       position: fixed;
       inset: 0;
-      background: rgba(15, 23, 42, 0.98);
+      background: rgba(11, 15, 25, 0.98);
       z-index: 9999;
       display: flex;
       flex-direction: column;
@@ -268,7 +263,7 @@
       border-color: #2563eb;
     }
 
-    /* Watermark Anti-Foto Kamera HP */
+    /* Watermark Tebal Berkedip (Merusak Hasil Foto Kamera HP) */
     #watermark-layer {
       position: absolute;
       inset: 0;
@@ -278,17 +273,25 @@
       flex-wrap: wrap;
       justify-content: space-around;
       align-content: space-around;
-      opacity: 0.15;
+      opacity: 0.22;
       overflow: hidden;
+      animation: wmFlicker 3s infinite alternate;
+    }
+
+    @keyframes wmFlicker {
+      0% { opacity: 0.18; }
+      50% { opacity: 0.28; }
+      100% { opacity: 0.18; }
     }
 
     .wm-item {
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #f8fafc;
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #38bdf8;
       transform: rotate(-25deg);
       white-space: nowrap;
-      margin: 20px;
+      margin: 24px;
+      text-shadow: 0 0 2px rgba(0,0,0,0.8);
     }
 
     #centipede-canvas {
@@ -308,7 +311,7 @@
   <div id="start-overlay" class="overlay">
     <h2 style="color: #38bdf8; margin-bottom: 8px;">Ujian CBT DKV Kelas XI</h2>
     <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 8px;">Materi: Dasar & Teknik Fotografi - Videografi</p>
-    <p style="color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">🔒 Protected Mode: Anti-SS, Anti-Copy, Anti-OCR AI</p>
+    <p style="color: #f59e0b; font-size: 0.85rem; font-weight: bold; margin-bottom: 20px;">🔒 High Security: Anti-Photo Camera & Anti-OCR AI</p>
     
     <div class="form-group">
       <label for="student-name">Nama Lengkap Siswa:</label>
@@ -365,7 +368,7 @@
   <script>
     const GAS_WEBAPP_URL = "https://script.google.com/macros/s/AKfycbxan3Ca7thzAZtqo0tmG3YJBpxwZtG5azbqcrGBogXZEzaNDyZ7J9szPGRGnMR3l43fWA/exec";
 
-    // MASTER BANK SOAL (100 SOAL DKV)
+    // MASTER BANK SOAL
     const allQuestionsBank = [
       { id: 1, q: "Komponen kamera yang berfungsi mengatur tingkat sensitivitas sensor terhadap cahaya adalah...", options: ["Aperture", "Shutter Speed", "ISO", "White Balance"], answer: "ISO" },
       { id: 2, q: "Semakin kecil angka f-stop pada lensa (contoh: f/1.8), maka...", options: ["Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit", "Bukaan diafragma semakin sempit dan gambar semakin gelap", "Sensitivitas sensor meningkat tajam", "Kecepatan rana menjadi makin lambat"], answer: "Bukaan diafragma semakin lebar dan ruang tajam (DoF) semakin sempit" },
@@ -416,57 +419,7 @@
       { id: 47, q: "Pemotongan adegan video dari satu shot ke shot lain secara langsung tanpa transisi dinamakan...", options: ["Cut", "Dissolve", "Fade Out", "Wipe"], answer: "Cut" },
       { id: 48, q: "Transisi video di mana gambar perlahan menghilang menjadi warna hitam dinamakan...", options: ["Cross Dissolve", "Fade to Black", "Cut on Action", "Jump Cut"], answer: "Fade to Black" },
       { id: 49, q: "Proses penyesuaian dan penciptaan mood warna pada video dinamakan...", options: ["Color Correction", "Color Grading", "Rendering", "Compositing"], answer: "Color Grading" },
-      { id: 50, q: "Kesalahan kesinambungan elemen antar-shot dinamakan pelanggaran...", options: ["Rule of Thirds", "Continuity", "Aspect Ratio", "Pacing"], answer: "Continuity" },
-      { id: 51, q: "Lensa fix 50mm sering disebut sebagai lensa standar karena...", options: ["Memiliki perspektif yang paling mirip dengan sudut pandang mata manusia", "Bisa melakukan zoom sangat jauh", "Harganya selalu paling murah", "Dapat mengambil gambar tanpa cahaya"], answer: "Memiliki perspektif yang paling mirip dengan sudut pandang mata manusia" },
-      { id: 52, q: "Istilah 'Depth of Field' (DoF) dalam fotografi merujuk pada...", options: ["Kedalaman ruang tajam atau area fokus dalam gambar", "Kecepatan pergerakan sensor kamera", "Tingkat kontras warna dalam foto", "Kekuatan kilatan lampu flash"], answer: "Kedalaman ruang tajam atau area fokus dalam gambar" },
-      { id: 53, q: "Aperture dengan nilai f/22 akan menghasilkan...", options: ["Ruang tajam sangat luas, seluruh latar belakang terlihat jelas", "Ruang tajam sangat sempit dan latar kabur", "Foto menjadi sangat terang di malam hari", "Kecepatan fokus menjadi dua kali lebih cepat"], answer: "Ruang tajam sangat luas, seluruh latar belakang terlihat jelas" },
-      { id: 54, q: "Fungsi utama dari penggunaan Parasol / Lens Hood pada lensa adalah...", options: ["Mencegah pantulan cahaya luar (flare) masuk ke lensa", "Membuat fokus gambar menjadi lebih tajam", "Mengubah warna foto menjadi kebiruan", "Melindungi kamera dari air laut"], answer: "Mencegah pantulan cahaya luar (flare) masuk ke lensa" },
-      { id: 55, q: "Teknik 'Panning' dilakukan dengan cara menggerakkan kamera mengikuti arah objek bergerak menggunakan Shutter Speed...", options: ["Lambat (misal 1/15s sampai 1/30s)", "Sangat cepat (misal 1/2000s)", "Tinggi (misal 1/1000s)", "Bulb Mode 10 detik"], answer: "Lambat (misal 1/15s sampai 1/30s)" },
-      { id: 56, q: "Gambar yang diambil dengan sudut High Angle akan memberikan kesan objek terlihat...", options: ["Kecil, lemah, atau tertekan", "Besar, agung, dan berkuasa", "Sejajar dan natural", "Dynamic dan stabil"], answer: "Kecil, lemah, atau tertekan" },
-      { id: 57, q: "Format audio uncompressed berkualitas tinggi yang umum digunakan dalam perekaman video profesional adalah...", options: ["WAV / AIFF", "MP3", "AAC", "OGG"], answer: "WAV / AIFF" },
-      { id: 58, q: "Jenis mikrofon yang sangat sensitif dari arah depan dan biasa dipasang pada boom pole dinamakan...", options: ["Shotgun Microphone", "Lavalier / Clip-on", "Dynamic Microphone", "Boundary Microphone"], answer: "Shotgun Microphone" },
-      { id: 59, q: "Fungsi dari Deadcat / Windscreen pada mikrofon lapangan adalah...", options: ["Meredam suara hembusan angin saat merekam outdoor", "Membuat suara vokal menjadi lebih merdu", "Meningkatkan volume audio secara otomatis", "Menghubungkan kabel audio tanpa nirkabel"], answer: "Meredam suara hembusan angin saat merekam outdoor" },
-      { id: 60, q: "Istilah 'B-Roll' dalam videografi mengacu pada...", options: ["Bahan video pendukung yang disisipkan untuk memperjelas narasi utama", "Daftar adegan yang gagal ditayangkan", "Rekaman audio latar belakang", "Video dengan kualitas resolusi rendah"], answer: "Bahan video pendukung yang disisipkan untuk memperjelas narasi utama" },
-      { id: 61, q: "Teknik memotong video di mana audio dari klip berikutnya terdengar sebelum gambarnya muncul dinamakan...", options: ["J-Cut", "L-Cut", "Jump Cut", "Match Cut"], answer: "J-Cut" },
-      { id: 62, q: "Teknik memotong video di mana gambar berubah ke adegan baru namun audionya tetap berlanjut dinamakan...", options: ["L-Cut", "J-Cut", "Cross Cut", "Smash Cut"], answer: "L-Cut" },
-      { id: 63, q: "Aturan 180-Degree Rule dalam sinematografi diterapkan untuk menjaga...", options: ["Konsistensi tata letak spasial dan arah pandang antarkarakter", "Pencahayaan agar selalu konstan", "Fokus lensa agar tidak terlepas", "Kecepatan fps video"], answer: "Konsistensi tata letak spasial dan arah pandang antarkarakter" },
-      { id: 64, q: "Jump Cut adalah teknik pemotongan gambar yang sengaja dilakukan untuk...", options: ["Memberikan kesan loncatan waktu atau mempercepat alur adegan", "Menghaluskan transisi adegan", "Memperbaiki kesalahan pencahayaan", "Menghilangkan suara latar"], answer: "Memberikan kesan loncatan waktu atau mempercepat alur adegan" },
-      { id: 65, q: "Proses 'Color Correction' berbeda dengan 'Color Grading' karena tujuannya adalah...", options: ["Menyeimbangkan dan menaturalisasi warna dasar agar sesuai kondisi asli", "Memberikan nuansa visual artistik/dramatis pada film", "Mengubah warna baju karakter", "Menghapus background hijau (Chroma key)"], answer: "Menyeimbangkan dan menaturalisasi warna dasar agar sesuai kondisi asli" },
-      { id: 66, q: "Fungsi utama layar hijau (Green Screen / Chroma Key) dalam produksi video adalah...", options: ["Memudahkan isolasi latar belakang untuk diganti dengan visual sintetis", "Membuat pencahayaan objek menjadi lebih terang", "Meredam gema suara di dalam ruangan", "Meningkatkan ketajaman lensa kamera"], answer: "Memudahkan isolasi latar belakang untuk diganti dengan visual sintetis" },
-      { id: 67, q: "Warna hijau dipilih sebagai standar Chroma Key karena...", options: ["Warna hijau paling jauh dari pigmen tonal kulit manusia", "Hijau adalah warna paling murah diproduksi", "Warna hijau menyerap cahaya paling kuat", "Kamera digital tidak bisa merekam warna hijau"], answer: "Warna hijau paling jauh dari pigmen tonal kulit manusia" },
-      { id: 68, q: "Istilah 'Clapperboard' dalam produksi film digunakan untuk...", options: ["Menyelaraskan audio dan video serta menandai nama adegan/take", "Menutup lensa dari debu", "Memberikan pencahayaan kilat", "Alat pengukur jarak fokus kamera"], answer: "Menyelaraskan audio dan video serta menandai nama adegan/take" },
-      { id: 69, q: "Tipe pencahayaan 'High Key Lighting' menghasilkan visual yang...", options: ["Terang, minim bayangan, dan berkesan positif/ceria", "Gelap, kontras tinggi, dan berkesan misterius", "Dominan berwarna merah dan hitam", "Penuh dengan bayangan tajam di wajah"], answer: "Terang, minim bayangan, dan berkesan positif/ceria" },
-      { id: 70, q: "Tipe pencahayaan 'Low Key Lighting' sering digunakan pada genre film...", options: ["Horor, Thriller, dan Film Noir", "Komedi situasi (Sitcom)", "Dokumenter edukasi", "Video klip musik pop"], answer: "Horor, Thriller, dan Film Noir" },
-      { id: 71, q: "Penggunaan Filter ND (Neutral Density) pada lensa kamera berfungsi sebagai...", options: ["'Kacamata hitam' lensa untuk mengurangi intensitas cahaya berlebih", "Peningkat kejenuhan warna foto secara otomatis", "Alat untuk memperbesar jarak fokus objek", "Pembersih jamur pada elemen lensa"], answer: "'Kacamata hitam' lensa untuk mengurangi intensitas cahaya berlebih" },
-      { id: 72, q: "Filter CPL (Circular Polarizer) paling efektif digunakan untuk...", options: ["Menghilangkan pantulan cahaya pada kaca/air dan memperbiru langit", "Meningkatkan kecepatan Shutter Speed di malam hari", "Memberikan efek blur pada tepi foto", "Mengubah foto warna menjadi hitam putih"], answer: "Menghilangkan pantulan cahaya pada kaca/air dan memperbiru langit" },
-      { id: 73, q: "Dalam videografi, istilah 'Rack Focus' mengacu pada teknik...", options: ["Mengalihkan fokus secara perlahan dari satu objek ke objek lain dalam satu shot", "Mempertahankan fokus pada objek yang bergerak cepat", "Mengunci fokus di posisi infinite", "Menggunakan dua kamera sekaligus secara paralel"], answer: "Mengalihkan fokus secara perlahan dari satu objek ke objek lain dalam satu shot" },
-      { id: 74, q: "Gimbal 3-Axis menstabilkan kamera pada tiga poros pergerakan, yaitu...", options: ["Pan, Tilt, dan Roll", "Zoom, Focus, dan Iris", "Dolly, Truck, dan Pedestal", "High, Low, dan Eye level"], answer: "Pan, Tilt, dan Roll" },
-      { id: 75, q: "Pengambilan gambar dengan teknik 'Establishing Shot' bertujuan untuk...", options: ["Memperkenalkan lokasi, waktu, dan atmosfer tempat adegan berlangsung", "Menampilkan ekspresi emosi mendalam dari karakter utama", "Menunjukkan detail produk secara tertutup", "Menampilkan adegan klimaks film"], answer: "Memperkenalkan lokasi, waktu, dan atmosfer tempat adegan berlangsung" },
-      { id: 76, q: "Mode pemotretan 'Aperture Priority' (A/Av) pada kamera berarti...", options: ["Pengguna menentukan nilai Aperture, kamera mengatur Shutter Speed otomatis", "Pengguna mengatur Shutter Speed, kamera menentukan Aperture", "Seluruh pengaturan diatur otomatis oleh sistem komputer kamera", "ISO dan White Balance diubah secara acak"], answer: "Pengguna menentukan nilai Aperture, kamera mengatur Shutter Speed otomatis" },
-      { id: 77, q: "Mode pemotretan 'Shutter Priority' (S/Tv) paling cocok digunakan untuk...", options: ["Memotret aksi olahraga atau riak air mengalir dengan kontrol waktu spesifik", "Membuat foto portrait dengan background bokeh sempurna", "Memotret lanskap alam di siang hari", "Memotret benda-benda studio yang diam"], answer: "Memotret aksi olahraga atau riak air mengalir dengan kontrol waktu spesifik" },
-      { id: 78, q: "Histogram dalam kamera menampilkan informasi grafik tentang...", options: ["Distribusi tingkat kecerahan (tonal) dari shadow hingga highlight", "Kapasitas sisa baterai dan memori card", "Kecepatan fokus otomatis pada objek", "Tingkat ketajaman warna merah, hijau, dan biru"], answer: "Distribusi tingkat kecerahan (tonal) dari shadow hingga highlight" },
-      { id: 79, q: "Jika grafik histogram menumpuk rapat di dinding sebelah kiri, foto tersebut mengalami...", options: ["Under-exposure (terlalu gelap)", "Over-exposure (terlalu terang)", "White Balance yang salah", "Noise tinggi"], answer: "Under-exposure (terlalu gelap)" },
-      { id: 80, q: "Teknik 'Slow Motion' dihasilkan dengan cara merekam video pada FPS...", options: ["Tinggi (misal 60 fps - 120 fps) lalu diputar pada kecepatan standar (24 fps)", "Rendah (misal 12 fps) lalu diputar pada kecepatan tinggi", "Standar 24 fps tanpa perubahan software", "Variabel antara 1 fps hingga 10 fps"], answer: "Tinggi (misal 60 fps - 120 fps) lalu diputar pada kecepatan standar (24 fps)" },
-      { id: 81, q: "Teknik 'Time-lapse' dihasilkan dengan cara merekam foto/video pada interval...", options: ["Lama secara berkala lalu diputar dengan kecepatan normal", "Sangat cepat dalam durasi yang panjang", "24 frame per detik penuh secara terus menerus", "Mode lambat dengan shutter speed 1/8000s"], answer: "Lama secara berkala lalu diputar dengan kecepatan normal" },
-      { id: 82, q: "Naskah video yang memuat dua kolom terpisah antara deskripsi Visual dan Audio dinamakan...", options: ["Two-Column Script / Dual Column", "Storyboard Text", "Treatment", "Call Sheet"], answer: "Two-Column Script / Dual Column" },
-      { id: 83, q: "Dokumen jadwal kerja harian syuting yang memuat daftar adegan, lokasi, dan aktor dinamakan...", options: ["Call Sheet", "Shot List", "Script Breakdown", "Production Book"], answer: "Call Sheet" },
-      { id: 84, q: "Lensa 'Macro' dirancang khusus untuk memotret objek...", options: ["Sangat kecil dengan jarak fokus sangat dekat dan perbesaran 1:1", "Sangat jauh seperti satelit atau bulan", "Pemandangan alam yang sangat luas", "Portrait manusia jarak sedang"], answer: "Sangat kecil dengan jarak fokus sangat dekat dan perbesaran 1:1" },
-      { id: 85, q: "Distorsi perspektif di mana objek di tepi frame tampak melengkung cembung dinamakan...", options: ["Barrel Distortion", "Pincushion Distortion", "Chromatic Aberration", "Vignetting"], answer: "Barrel Distortion" },
-      { id: 86, q: "Lingkaran hitam atau gelap di setiap sudut bingkai foto akibat bayangan lensa dinamakan...", options: ["Vignetting", "Flare", "Noise", "Aberasi Kromatik"], answer: "Vignetting" },
-      { id: 87, q: "Garis bias warna keunguan/hijau di sepanjang batas objek berkontras tinggi dinamakan...", options: ["Chromatic Aberration / Purple Fringing", "Distorsi Barrel", "Vignetting", "Motion Blur"], answer: "Chromatic Aberration / Purple Fringing" },
-      { id: 88, q: "Sudut pengambilan gambar 'Frog Eye View' menempatkan kamera...", options: ["Hampir menempel di tanah mengarah ke atas", "Sejajar dengan mata orang dewasa", "Di atas kepala objek menggunakan tripod tinggi", "Di dalam air tanah"], answer: "Hampir menempel di tanah mengarah ke atas" },
-      { id: 89, q: "Ukuran file foto mentah (RAW) jauh lebih besar daripada file JPEG karena...", options: ["Tidak mengalami kompresi data dan menyimpan seluruh dinamika sensor", "Memiliki resolusi pixel dua kali lipat lebih banyak", "Memuat file audio latar belakang", "Dibuat khusus untuk dicetak pada baliho"], answer: "Tidak mengalami kompresi data dan menyimpan seluruh dinamika sensor" },
-      { id: 90, q: "Fungsi utama dari penggunaan Tripod saat membuat foto Long Exposure adalah...", options: ["Menjaga kamera tetap stabil dan bebas dari guncangan tangan (camera shake)", "Membuat foto menjadi otomatis fokus", "Menambah pencahayaan alami di malam hari", "Mengubah lensa biasa menjadi lensa tele"], answer: "Menjaga kamera tetap stabil dan bebas dari guncangan tangan (camera shake)" },
-      { id: 91, q: "Penggunaan 'Monopod' biasanya dipilih oleh fotografer olahraga karena...", options: ["Lebih ringkas, fleksibel, dan cepat dipindahkan dibanding tripod", "Bisa berdiri sendiri tanpa dipegang", "Harganya paling mahal", "Mampu menahan beban berat hingga 100kg"], answer: "Lebih ringkas, fleksibel, dan cepat dipindahkan dibanding tripod" },
-      { id: 92, q: "Istilah 'Catchlight' dalam fotografi portrait mengacu pada...", options: ["Pantulan titik cahaya pada mata subjek yang membuatnya terlihat hidup", "Lampu utama yang menerangi bagian belakang kepala", "Bayangan hitam di bawah hidung subjek", "Cahaya kilat dari flash kamera"], answer: "Pantulan titik cahaya pada mata subjek yang membuatnya terlihat hidup" },
-      { id: 93, q: "Gaya foto 'Siluet' dihasilkan ketika subjek dipotret dengan posisi...", options: ["Membelakangi sumber cahaya utama (backlight kuat)", "Mengerahkan wajah langsung ke arah sumber cahaya", "Menggunakan dua reflektor di samping kiri dan kanan", "Di dalam ruangan tanpa lampu"], answer: "Membelakangi sumber cahaya utama (backlight kuat)" },
-      { id: 94, q: "Proses 'Export' / 'Render' dalam editing video adalah...", options: ["Menggabungkan seluruh klip, efek, dan audio menjadi satu file video utuh", "Mengimpor klip dari memori card ke komputer", "Memotong video menjadi beberapa bagian", "Merekam suara dubbing suara"], answer: "Menggabungkan seluruh klip, efek, dan audio menjadi satu file video utuh" },
-      { id: 95, q: "Codec video H.264 / MP4 sangat populer di internet karena...", options: ["Memberikan rasio kompresi tinggi dengan kualitas gambar yang tetap bagus", "Ukuran filenya selalu paling besar", "Hanya bisa diputar di komputer Mac", "Tidak memiliki saluran audio"], answer: "Memberikan rasio kompresi tinggi dengan kualitas gambar yang tetap bagus" },
-      { id: 96, q: "Resolusi video 'Full HD' memiliki dimensi pixel sebesar...", options: ["1920 x 1080 pixel", "1280 x 720 pixel", "3840 x 2160 pixel", "720 x 480 pixel"], answer: "1920 x 1080 pixel" },
-      { id: 97, q: "Resolusi video '4K Ultra HD' memiliki dimensi pixel sebesar...", options: ["3840 x 2160 pixel", "1920 x 1080 pixel", "2560 x 1440 pixel", "1280 x 720 pixel"], answer: "3840 x 2160 pixel" },
-      { id: 98, q: "Softbox digunakan dalam studio fotografi bertujuan untuk...", options: ["Melembutkan dan menyebarkan cahaya dari lampu flash agar bayangan tidak kasar", "Mengarahkan cahaya menjadi satu garis lurus tajam", "Membuat lampu menjadi berwarna-warni", "Mendinginkan suhu lampu studio"], answer: "Melembutkan dan menyebarkan cahaya dari lampu flash agar bayangan tidak kasar" },
-      { id: 99, q: "Fungsi dari 'Reflector' dalam pemotretan outdoor adalah...", options: ["Memantulkan cahaya alami ke bagian subjek yang gelap/terbayang", "Menyerap cahaya berlebih dari matahari", "Melindungi kamera dari sinar UV", "Merekam bayangan objek"], answer: "Memantulkan cahaya alami ke bagian subjek yang gelap/terbayang" },
-      { id: 100, q: "Aturan 'Golden Ratio' (Rasio Emas) dalam komposisi visual didasarkan pada proporsi matematis sebesar...", options: ["1 : 1.618", "1 : 2.5", "3 : 4", "16 : 9"], answer: "1 : 1.618" }
+      { id: 50, q: "Kesalahan kesinambungan elemen antar-shot dinamakan pelanggaran...", options: ["Rule of Thirds", "Continuity", "Aspect Ratio", "Pacing"], answer: "Continuity" }
     ];
 
     let questions = [];
@@ -506,7 +459,7 @@
       }
     });
 
-    // SISTEM KEAMANAN TINGKAT TINGGI
+    // BLOKIR INTERAKSI / SCREENSHOT / COPY
     document.addEventListener('contextmenu', e => e.preventDefault());
     document.addEventListener('copy', e => e.preventDefault());
     document.addEventListener('cut', e => e.preventDefault());
@@ -578,10 +531,10 @@
     function generateWatermark(name, nis) {
       const wmLayer = document.getElementById('watermark-layer');
       wmLayer.innerHTML = '';
-      for (let i = 0; i < 24; i++) {
+      for (let i = 0; i < 20; i++) {
         const div = document.createElement('div');
         div.className = 'wm-item';
-        div.innerText = `${name} - ${nis}`;
+        div.innerText = `${name} • ${nis}`;
         wmLayer.appendChild(div);
       }
     }
@@ -660,7 +613,7 @@
       }
     }
 
-    // RENDER SOAL DENGAN ANTI-OCR AI & VISUAL NOISE PATTERN
+    // RENDER CANVAS DENGAN ANTI-OCR AI & MIKRO-INTERFERENSI
     function renderQuestionToCanvas(text) {
       const canvas = document.getElementById('question-canvas');
       const ctx = canvas.getContext('2d');
@@ -668,11 +621,11 @@
       const width = canvas.parentElement.clientWidth - 32;
       canvas.width = width;
 
-      ctx.font = "bold 16px monospace";
+      ctx.font = "bold 16px Courier New, monospace";
       const words = text.split(' ');
       let line = '';
       let lines = [];
-      const maxWidth = width - 20;
+      const maxWidth = width - 24;
 
       for (let n = 0; n < words.length; n++) {
         let testLine = line + words[n] + ' ';
@@ -685,35 +638,50 @@
       }
       lines.push(line);
 
-      const lineHeight = 26;
-      canvas.height = (lines.length * lineHeight) + 40;
+      const lineHeight = 28;
+      canvas.height = (lines.length * lineHeight) + 36;
 
-      // 1. Latar Belakang Canvas
-      ctx.fillStyle = "#1e293b";
+      // 1. Base Dark Background
+      ctx.fillStyle = "#111827";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 2. Visual Noise Pixel Acak (Mengacaukan Deteksi OCR Kamera)
-      for (let i = 0; i < 500; i++) {
-        ctx.fillStyle = Math.random() > 0.5 ? "rgba(255,255,255,0.07)" : "rgba(0,0,0,0.25)";
+      // 2. High-Density Micro Noise (Mengacaukan Deteksi OCR AI)
+      for (let i = 0; i < 800; i++) {
+        ctx.fillStyle = Math.random() > 0.5 ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.35)";
         ctx.fillRect(Math.random() * canvas.width, Math.random() * canvas.height, 2, 2);
       }
 
-      // 3. Garis Wave/Scanline Interferensi (Merusak Segmentasi OCR AI)
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.12)";
+      // 3. Garis Potong Horizontal Halus (Diskonfigurasi Piksel Huruf AI)
+      ctx.strokeStyle = "rgba(241, 245, 249, 0.12)";
       ctx.lineWidth = 1;
-      for (let i = 0; i < canvas.height; i += 7) {
+      for (let i = 4; i < canvas.height; i += 6) {
         ctx.beginPath();
         ctx.moveTo(0, i);
-        ctx.lineTo(canvas.width, i + Math.sin(i) * 2);
+        ctx.lineTo(canvas.width, i);
         ctx.stroke();
       }
 
-      // 4. Render Teks Soal
+      // 4. Render Huruf per Huruf dengan Jitter Jarak (Mata Tetap Nyaman, AI Bingung)
+      let y = 30;
       ctx.font = "bold 16px system-ui, sans-serif";
-      let y = 32;
+
       for (let i = 0; i < lines.length; i++) {
-        ctx.fillStyle = "#f8fafc";
-        ctx.fillText(lines[i], 12, y);
+        let currentLine = lines[i];
+        let startX = 12;
+
+        for (let charIdx = 0; charIdx < currentLine.length; charIdx++) {
+          const char = currentLine[charIdx];
+          
+          // Warna teks kontras sedang (nyaman di mata manusia, membingungkan sensor kamera)
+          ctx.fillStyle = "#e2e8f0";
+          
+          // Render Karakter
+          ctx.fillText(char, startX, y);
+
+          // Geser posisi X dengan sedikit variasi acak halus
+          const charWidth = ctx.measureText(char).width;
+          startX += charWidth + (Math.random() * 0.4);
+        }
         y += lineHeight;
       }
     }
